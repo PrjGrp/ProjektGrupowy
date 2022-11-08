@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ProjektGrupowy</string>
+
+
+    <string name="mock_dialog_1">Czekam na randomowy fakt...</string>
+    <string name="mock_button_1">Pobierz fakt</string>
+    <string name="mock_exception_1">Błąd pobierania</string>
 </resources>

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ProjektGrupowy</string>
 
-
+    <!-- Strings for mock activity -->
     <string name="mock_dialog_1">Czekam na randomowy fakt...</string>
     <string name="mock_button_1">Pobierz fakt</string>
     <string name="mock_exception_1">Błąd pobierania</string>
@@ -10,4 +10,7 @@
     <string name="loginActivityLoginHintLabel">Login</string>
     <string name="loginActivityDefaultLoginInputLabel">Login</string>
     <string name="loginActivityDefaultButtonTextLabel">Zaloguj</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>

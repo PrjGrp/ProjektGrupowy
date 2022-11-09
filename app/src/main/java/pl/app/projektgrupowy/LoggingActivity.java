@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-public class Logging extends AppCompatActivity {
+public class LoggingActivity extends AppCompatActivity {
 
     TextInputEditText textInputEditUsername, textInputEditPassword;
     Button buttonLogging;

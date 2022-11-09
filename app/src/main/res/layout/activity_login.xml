@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Logging">
+
+    <RelativeLayout
+        android:layout_width="360dp"
+        android:layout_height="530dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="0dp"
+            android:gravity="center"
+            android:text="@string/loginActivityDefaultMessageLabel"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/editTextUsernameLoginActivity"
+            android:layout_width="@dimen/loginActivityButtonAndInputWidth"
+            android:layout_height="@dimen/loginActivityButtonAndInputHeight"
+            android:layout_below="@+id/textView"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="32dp"
+            android:ems="10"
+            android:hint="@string/loginActivityLoginHintLabel"
+            android:inputType="textPersonName"
+            android:text="@string/loginActivityDefaultLoginInputLabel" />
+
+        <EditText
+            android:id="@+id/editTextPasswordLoginActivity"
+            android:layout_width="@dimen/loginActivityButtonAndInputWidth"
+            android:layout_height="@dimen/loginActivityButtonAndInputHeight"
+            android:layout_below="@+id/editTextUsernameLoginActivity"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:ems="10"
+            android:hint="@string/loginActivityPasswordHintLabel"
+            android:inputType="textPassword" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button"
+            android:layout_width="@dimen/loginActivityButtonAndInputWidth"
+            android:layout_height="@dimen/loginActivityButtonAndInputHeight"
+            android:layout_below="@+id/editTextPasswordLoginActivity"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/login_activity_button"
+            android:text="@string/loginActivityDefaultButtonTextLabel" />
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

@@ -9,8 +9,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="backgroundColor">#FEF1E0</color>
     <color name="scrollColor">#FFF</color>
-    <color name="buttonColor_2">#F17950</color>
     <color name="transparent">#00000000</color>
     <color name="colorPrimaryDark">#78517C</color>
     <color name="textBackground">#925478</color>
+    <color name="buttonColor_1">#087CF8</color>
+    <color name="buttonColor_2">#F17950</color>
 </resources>

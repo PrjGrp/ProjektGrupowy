@@ -14,9 +14,9 @@
         android:layout_marginTop="50dp"
         android:fontFamily="@font/poppinsbold"
         android:gravity="center"
-        android:text="Zaloguj się"
+        android:text="@string/loginActivityDefaultMessageLabel"
         android:textColor="@color/black"
-        android:textSize="30dp"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,21 +38,22 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:hint="Nazwa użytkownika"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:textColor="@color/black"
 
 
             >
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/usernameLogging"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-
                 android:fontFamily="@font/poppinsmedium"
+
+                android:textColor="@color/black"
                 tools:targetApi="jelly_bean" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,9 +65,9 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:hint="Hasło"
+            android:textColor="@color/black"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUsername"
             tools:layout_editor_absoluteX="0dp"
-            android:textColor="@color/black"
 
             >
 

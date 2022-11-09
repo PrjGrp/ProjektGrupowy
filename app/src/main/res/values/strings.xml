@@ -8,6 +8,6 @@
     <string name="loginActivityPasswordHintLabel">Hasło</string>
     <string name="loginActivityDefaultMessageLabel">Podaj login i hasło:</string>
     <string name="loginActivityLoginHintLabel">Login</string>
-    <string name="loginActivityDefaultLoginInputLabel">Login2</string>
-    <string name="loginActivityDefaultButtonTextLabel">Login 2</string>
+    <string name="loginActivityDefaultLoginInputLabel">Login</string>
+    <string name="loginActivityDefaultButtonTextLabel">Zaloguj</string>
 </resources>

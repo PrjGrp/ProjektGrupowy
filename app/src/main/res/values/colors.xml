@@ -14,4 +14,9 @@
     <color name="textBackground">#925478</color>
     <color name="buttonColor_1">#087CF8</color>
     <color name="buttonColor_2">#F17950</color>
+    <color name="backgroundColor_1">#324F6A</color>
+    <color name="backgroundColor_2">#1d2a46</color>
+    <color name="grey">#7E7E7E</color>
+    <color name="loginActivityButtonColor">#F53C8D</color>
+
 </resources>

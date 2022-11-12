@@ -14,37 +14,25 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-public class LoggingActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     TextInputEditText textInputEditUsername, textInputEditPassword;
     Button buttonLogging;
     Button buttonWithoutLog;
-    TextView textViewSign;
 
     ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_logging);
+        setContentView(R.layout.activity_login);
 
         textInputEditUsername = findViewById(R.id.usernameLogging);
         textInputEditPassword = findViewById(R.id.passwordLogging);
         buttonLogging = findViewById(R.id.buttonLogin);
         buttonWithoutLog = findViewById(R.id.buttonWithoutLogin);
-        textViewSign = findViewById(R.id.signUpText);
         progressBar = findViewById(R.id.progressLogging);
 
-        /*
-        textViewSign.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent2 = new Intent(getApplicationContext(), Sign.class);
-                startActivity(intent2);
-                finish();
-            }
-        });
-        */
         buttonWithoutLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

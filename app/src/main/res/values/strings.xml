@@ -5,18 +5,11 @@
     <string name="mock_dialog_1">Czekam na randomowy fakt...</string>
     <string name="mock_button_1">Pobierz fakt</string>
     <string name="mock_exception_1">Błąd pobierania</string>
-    <string name="loginActivityPasswordHintLabel">Hasło</string>
 
+    <string name="loginActivityPasswordHintLabel">Hasło</string>
     <string name="loginActivityLoginHintLabel">Login</string>
     <string name="loginActivityDefaultLoginInputLabel">Nazwa użytkownika</string>
     <string name="loginActivityDefaultButtonTextLabel">Zaloguj się</string>
-
-
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="loginActivityNoLoggedLabel">Rozpocznij bez logowania</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>

@@ -90,7 +90,7 @@ public class LoginFragment extends Fragment {
             progressDialog.dismiss();
             try {
                 if (!s.equals("")) {
-                    mainActivity.setToken(s);
+                    mainActivity.setToken(s); // To jest ważne, bo ustawia token na mainActivity
                     mainActivity.replaceLoginFragment();
                 }
                 else {

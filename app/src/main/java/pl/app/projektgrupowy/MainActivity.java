@@ -1,13 +1,14 @@
 package pl.app.projektgrupowy;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,98 +19,62 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import pl.app.projektgrupowy.fragments.DashboardFragment;
+
 /**
- * Klasa mockowa, można coś tu przetestować, dopóki główną Activity nie będzie ekran logowania.
- * Aktualnie realizuje klienta http.
+ * Klasa realizująca naszą główną Activity, ma tylko miejsce na fragmenty i toolbar.
  */
 public class MainActivity extends AppCompatActivity {
-    private final String myUrl = "https://catfact.ninja/fact";
+    private String token = "";
 
-    private TextView resultsTextView;
-    private Button myButton;
-    private ProgressDialog progressDialog;
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public void replaceLoginFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_view, DashboardFragment.class, null)
+                .setReorderingAllowed(true)
+                .commit();
+    }
+
+    private void savePreferences() {
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("token", token);
+        editor.commit();
+    }
+
+    private void loadPreferences() {
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        token = sharedPreferences.getString("token", "");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        resultsTextView = (TextView) findViewById(R.id.results);
-        myButton = (Button) findViewById(R.id.button);
+        loadPreferences();
 
-        myButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GetSomethingAsync aTask = new GetSomethingAsync();
-                aTask.execute();
-            }
-        });
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
-    /**
-     * Wewnętrzna klasa rozszerzająca AsyncTask, do strzałów na resta.
-     * Zmieniamy tutaj podejście do komunikacji z bazą. Nie będziemy mieli jednego zbiorczego serwisu
-     * dla całej apki, ale każda klasa, w miarę potrzeby będzie miała taką klasę wewnętrzną do strzałów.
-     * Jakby na przyszłość ktoś potrzebował, no to, przeciążamy trzy metody: to co się wywołuje przed
-     * strzałem (onPreExecute), sam strzał (doInBackground) i to co na koniec z wynikiem ze strzału
-     * (onPostExecute).
-     * Warto doczytać docsy jakieś o AsyncTask.
-     */
-    private class GetSomethingAsync extends AsyncTask<String, String, String> {
-        protected void onPostExecute(String s) {
-            progressDialog.dismiss();
-            try {
-                JSONObject jsonObject = new JSONObject(s);
-                resultsTextView.setVisibility(View.VISIBLE);
-                resultsTextView.setText(jsonObject.getString("fact"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!token.equals("")) replaceLoginFragment();
+    }
 
-        @Override
-        protected String doInBackground(String... strings) {
-            String result = "";
-            try {
-                URL url;
-                HttpsURLConnection urlConnection = null;
-                try {
-                    url = new URL(myUrl);
-                    urlConnection = (HttpsURLConnection) url.openConnection();
-
-                    InputStream in = urlConnection.getInputStream();
-                    InputStreamReader isw = new InputStreamReader(in);
-
-                    int data = isw.read();
-                    while (data != -1) {
-                        result += (char) data;
-                        data = isw.read();
-                    }
-
-                    return result;
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    if (urlConnection != null) {
-                        urlConnection.disconnect();
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return getString(R.string.mock_exception_1);
-            }
-            return result;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(MainActivity.this);
-            progressDialog.setMessage(getString(R.string.mock_dialog_1));
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-
-        }
+    @Override
+    public void onBackPressed() {
+        savePreferences(); // TODO: Zakomentuj tę linijkę, jeśli nie chcesz, żeby zapamiętywało token (tj. dane logowania)
+        super.onBackPressed();
     }
 }

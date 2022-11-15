@@ -9,9 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONObject;
 
@@ -62,6 +65,12 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // TODO: Tutaj pobierasz referencje do kolejnych widoków (jak jakieś dodasz)
+
+        TextInputEditText textInputEditUsername, textInputEditPassword; //PS
+
+        textInputEditUsername = view.findViewById(R.id.usernameLogging);//PS
+        textInputEditPassword = view.findViewById(R.id.passwordLogging); //PS
+
         mainActivity = (MainActivity) getActivity();
         loginButton = (Button) view.findViewById(R.id.login_button);
         loginResult = (TextView) view.findViewById(R.id.login_result);
@@ -72,7 +81,16 @@ public class LoginFragment extends Fragment {
             public void onClick(View view) {
                 GetToken getToken = new GetToken();
                 // TODO: Tutaj parametryzujesz hasło i login
-                getToken.execute("io", "1");
+                final String usernameString, passwordString; //PS
+                usernameString = String.valueOf(textInputEditUsername.getText()); //PS
+                passwordString = String.valueOf(textInputEditPassword.getText()); //PS
+
+                if(!usernameString.equals("") && !passwordString.equals("")) {
+                    getToken.execute("io", "1");
+                    Toast.makeText(getActivity().getApplication(), "Zalogowano do aplikacji", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity().getApplication(), "Wszystkie pola wymagane", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -107,9 +125,14 @@ public class LoginFragment extends Fragment {
          * @param strings Tablica parametrów wejściowych
          * @return To jest przekazywane do onPostExecute
          */
+
+
+
         @Override
         protected String doInBackground(String... strings) {
             String result = "";
+
+
             try {
                 String username = strings[0];
                 String password = strings[1];

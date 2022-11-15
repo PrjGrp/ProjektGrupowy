@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -22,6 +21,7 @@ import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -30,20 +30,11 @@ import pl.app.projektgrupowy.R;
 
 /**
  * To jest klasa realizująca nasze logowanie do apki.
- *
- * TODO:
- * @PawełSiwek
- * Docelowo ma mieć kontrolki na login, hasło (z gwiazdkami zamiast znaków) i przycisk zaloguj.
- * Strzał do resta jest już gotowy, trzeba tylko sparametryzować login i hasło, na razie są na sztywno.
- * Gdzie to robić jest opisane poniżej.
- * Działaj tylko na LoginFragment.java, fragment_login.xml i strings.xml w miarę możliwości.
- * Nie tykaj się layoutu, poustawiaj tylko, wyglądem zajmie się Paweł Kiedrzyński.
  */
 public class LoginFragment extends Fragment {
 
     private MainActivity mainActivity;
 
-    private Button loginButton;
     private TextView loginResult;
     private ProgressDialog progressDialog;
 
@@ -64,34 +55,24 @@ public class LoginFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        // TODO: Tutaj pobierasz referencje do kolejnych widoków (jak jakieś dodasz)
 
-        TextInputEditText textInputEditUsername, textInputEditPassword; //PS
+        TextInputEditText textInputEditUsername, textInputEditPassword;
 
-        textInputEditUsername = view.findViewById(R.id.usernameLogging);//PS
-        textInputEditPassword = view.findViewById(R.id.passwordLogging); //PS
+        textInputEditUsername = view.findViewById(R.id.usernameLogin);
+        textInputEditPassword = view.findViewById(R.id.passwordLogin);
 
         mainActivity = (MainActivity) getActivity();
-        loginButton = (Button) view.findViewById(R.id.login_button);
+        Button loginButton = (Button) view.findViewById(R.id.login_button);
         loginResult = (TextView) view.findViewById(R.id.login_result);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(view1 -> {
+            GetToken getToken = new GetToken();
+            final String usernameString, passwordString;
+            usernameString = String.valueOf(textInputEditUsername.getText());
+            passwordString = String.valueOf(textInputEditPassword.getText());
 
-            @Override
-            public void onClick(View view) {
-                GetToken getToken = new GetToken();
-                // TODO: Tutaj parametryzujesz hasło i login
-                final String usernameString, passwordString; //PS
-                usernameString = String.valueOf(textInputEditUsername.getText()); //PS
-                passwordString = String.valueOf(textInputEditPassword.getText()); //PS
-
-                if(!usernameString.equals("") && !passwordString.equals("")) {
-                    getToken.execute("io", "1");
-                    Toast.makeText(getActivity().getApplication(), "Zalogowano do aplikacji", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity().getApplication(), "Wszystkie pola wymagane", Toast.LENGTH_SHORT).show();
-                }
-            }
+            if(!usernameString.equals("") && !passwordString.equals("")) getToken.execute(usernameString, passwordString);
+            else Toast.makeText(getActivity().getApplication(), "Wszystkie pola wymagane", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -108,7 +89,8 @@ public class LoginFragment extends Fragment {
             progressDialog.dismiss();
             try {
                 if (!s.equals("")) {
-                    mainActivity.setToken(s); // To jest ważne, bo ustawia token na mainActivity
+                    mainActivity.setToken(s);
+                    Toast.makeText(getActivity().getApplication(), "Zalogowano do aplikacji", Toast.LENGTH_SHORT).show();
                     mainActivity.replaceLoginFragment();
                 }
                 else {
@@ -157,7 +139,7 @@ public class LoginFragment extends Fragment {
 
                     if (urlConnection.getResponseCode() == 200) {
                         InputStream response = urlConnection.getInputStream();
-                        InputStreamReader responseReader = new InputStreamReader(response, "UTF-8");
+                        InputStreamReader responseReader = new InputStreamReader(response, StandardCharsets.UTF_8);
                         JsonReader jsonReader = new JsonReader(responseReader);
 
                         jsonReader.beginObject();

@@ -13,6 +13,8 @@
     <string name="login_awaiting">Czekam na odpowiedź...</string>
     <string name="login_failed">Nie udało się zalogować</string>
     <string name="login_success">Udało się zalogować</string>
+    <string name="login_username_hint">Nazwa użytkownika</string>
+    <string name="login_password_hint">Hasło</string>
 
     <!-- Strings for DashboardFragment -->
     <string name="dashboard_hello">Udało Ci się tu dotrzeć, gratuluję</string>

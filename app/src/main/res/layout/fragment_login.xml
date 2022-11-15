@@ -8,12 +8,15 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.247"
-        tools:layout_editor_absoluteX="0dp">
+        app:layout_constraintVertical_bias="0.245">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutUsername"
@@ -21,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:hint="Nazwa użytkownika"
+            android:hint="@string/login_username_hint"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -29,12 +32,12 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/usernameLogging"
+                android:id="@+id/usernameLogin"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:textColor="@color/black"
 
-                tools:targetApi="jelly_bean" />
+                android:textColorHint="#546E7A" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -44,7 +47,7 @@
 
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:hint="Hasło"
+            android:hint="@string/login_password_hint"
             android:textColor="@color/black"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUsername"
             tools:layout_editor_absoluteX="0dp"
@@ -52,11 +55,11 @@
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/passwordLogging"
+                android:id="@+id/passwordLogin"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:inputType="textPassword"
-                tools:targetApi="jelly_bean" />
+                android:textColorHint="#546E7A"/>
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -69,8 +72,9 @@
         android:text="@string/login_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <TextView
         android:id="@+id/login_result"

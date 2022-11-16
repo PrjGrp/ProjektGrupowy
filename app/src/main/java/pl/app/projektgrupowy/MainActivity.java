@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import pl.app.projektgrupowy.fragments.AddFragment;
 import pl.app.projektgrupowy.fragments.DashboardFragment;
 import pl.app.projektgrupowy.fragments.LoginFragment;
 
@@ -84,8 +85,21 @@ public class MainActivity extends AppCompatActivity {
         menu.clear();
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
         switch (currentFragment.getClass().getSimpleName()) {
-            case "DashboardFragment":
+            case "DashboardFragment": {
                 getMenuInflater().inflate(R.menu.toolbar_dashboard, menu);
+                toolbar.setTitle(R.string.title_toolbar_dashboard);
+                break;
+            }
+            case "AddFragment": {
+                getMenuInflater().inflate(R.menu.toolbar_add, menu);
+                toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
+                toolbar.setNavigationOnClickListener(view -> {
+                    toolbar.setNavigationIcon(null);
+                    super.onBackPressed();
+                } );
+                toolbar.setTitle(R.string.title_toolbar_add);
+                break;
+            }
         }
 
         return true;
@@ -102,6 +116,18 @@ public class MainActivity extends AppCompatActivity {
                         .replace(R.id.fragment_container_view, LoginFragment.class, null)
                         .setReorderingAllowed(true)
                         .commit();
+                toolbar.setTitle(R.string.app_name);
+                toolbar.setNavigationIcon(null);
+                break;
+            }
+            case R.id.action_toolbar_dashboard_add: {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container_view, AddFragment.class, null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack("AddFragment")
+                        .commit();
+                invalidateOptionsMenu();
                 break;
             }
         }

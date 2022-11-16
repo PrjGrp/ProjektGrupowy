@@ -12,6 +12,9 @@ import androidx.fragment.app.Fragment;
 import pl.app.projektgrupowy.MainActivity;
 import pl.app.projektgrupowy.R;
 
+/**
+ * Dashboard z tłumaczeniami
+ */
 public class DashboardFragment extends Fragment {
 
     private MainActivity mainActivity;

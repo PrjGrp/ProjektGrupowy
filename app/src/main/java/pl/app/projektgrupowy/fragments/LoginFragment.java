@@ -84,13 +84,6 @@ public class LoginFragment extends Fragment {
                 final String usernameString, passwordString; //PS
                 usernameString = String.valueOf(textInputEditUsername.getText()); //PS
                 passwordString = String.valueOf(textInputEditPassword.getText()); //PS
-
-                if(!usernameString.equals("") && !passwordString.equals("")) {
-                    getToken.execute("io", "1");
-                    Toast.makeText(getActivity().getApplication(), "Zalogowano do aplikacji", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity().getApplication(), "Wszystkie pola wymagane", Toast.LENGTH_SHORT).show();
-                }
             }
         });
     }

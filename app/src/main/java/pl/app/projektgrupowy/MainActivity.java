@@ -2,30 +2,24 @@ package pl.app.projektgrupowy;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.app.ProgressDialog;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-
-import javax.net.ssl.HttpsURLConnection;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import pl.app.projektgrupowy.fragments.DashboardFragment;
+import pl.app.projektgrupowy.fragments.LoginFragment;
 
 /**
  * Klasa realizująca naszą główną Activity, ma tylko miejsce na fragmenty i toolbar.
  */
 public class MainActivity extends AppCompatActivity {
     private String token = "";
+    private Toolbar toolbar;
 
     public String getToken() {
         return token;
@@ -37,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void replaceLoginFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.popBackStack();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, DashboardFragment.class, null)
                 .setReorderingAllowed(true)
@@ -62,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         loadPreferences();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
@@ -74,7 +69,42 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        savePreferences(); // TODO: Zakomentuj tę linijkę, jeśli nie chcesz, żeby zapamiętywało token (tj. dane logowania)
+        savePreferences();
         super.onBackPressed();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_login, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.clear();
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
+        switch (currentFragment.getClass().getSimpleName()) {
+            case "DashboardFragment":
+                getMenuInflater().inflate(R.menu.toolbar_dashboard, menu);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_toolbar_dashboard_logout: {
+                token = "";
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.popBackStack();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container_view, LoginFragment.class, null)
+                        .setReorderingAllowed(true)
+                        .commit();
+                break;
+            }
+        }
+        return true;
     }
 }

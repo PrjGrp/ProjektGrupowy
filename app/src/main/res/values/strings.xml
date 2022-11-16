@@ -8,11 +8,15 @@
     <string name="mock_button_1">Pobierz fakt</string>
     <string name="mock_exception_1">Błąd pobierania</string>
 
+    <!-- Strings for Toolbar -->
+    <string name="toolbar_log_out">Wyloguj</string>
+
     <!-- Strings for LoginFragment -->
     <string name="login_button">Zaloguj</string>
     <string name="login_awaiting">Czekam na odpowiedź...</string>
     <string name="login_failed">Nie udało się zalogować</string>
-    <string name="login_success">Udało się zalogować</string>
+    <string name="login_success">Logowanie zakończone sukcesem</string>
+    <string name="login_insufficient_data">Wszystkie pola wymagane</string>
     <string name="login_username_hint">Nazwa użytkownika</string>
     <string name="login_password_hint">Hasło</string>
 

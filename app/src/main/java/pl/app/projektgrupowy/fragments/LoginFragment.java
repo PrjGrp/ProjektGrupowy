@@ -34,8 +34,6 @@ import pl.app.projektgrupowy.R;
 public class LoginFragment extends Fragment {
 
     private MainActivity mainActivity;
-
-    private TextView loginResult;
     private ProgressDialog progressDialog;
 
     public LoginFragment() {
@@ -63,7 +61,6 @@ public class LoginFragment extends Fragment {
 
         mainActivity = (MainActivity) getActivity();
         Button loginButton = (Button) view.findViewById(R.id.login_button);
-        loginResult = (TextView) view.findViewById(R.id.login_result);
 
         loginButton.setOnClickListener(view1 -> {
             GetToken getToken = new GetToken();
@@ -72,7 +69,7 @@ public class LoginFragment extends Fragment {
             passwordString = String.valueOf(textInputEditPassword.getText());
 
             if(!usernameString.equals("") && !passwordString.equals("")) getToken.execute(usernameString, passwordString);
-            else Toast.makeText(getActivity().getApplication(), "Wszystkie pola wymagane", Toast.LENGTH_SHORT).show();
+            else Toast.makeText(getActivity().getApplication(), getString(R.string.login_insufficient_data), Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -90,13 +87,11 @@ public class LoginFragment extends Fragment {
             try {
                 if (!s.equals("")) {
                     mainActivity.setToken(s);
-                    Toast.makeText(getActivity().getApplication(), "Zalogowano do aplikacji", Toast.LENGTH_SHORT).show();
                     mainActivity.replaceLoginFragment();
+                    mainActivity.invalidateOptionsMenu();
+                    Toast.makeText(mainActivity.getApplication(), getString(R.string.login_success), Toast.LENGTH_SHORT).show();
                 }
-                else {
-                    loginResult.setText(getString(R.string.login_failed));
-                    loginResult.setVisibility(View.VISIBLE);
-                }
+                else Toast.makeText(mainActivity.getApplication(), getString(R.string.login_failed), Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -107,9 +102,6 @@ public class LoginFragment extends Fragment {
          * @param strings Tablica parametrów wejściowych
          * @return To jest przekazywane do onPostExecute
          */
-
-
-
         @Override
         protected String doInBackground(String... strings) {
             String result = "";

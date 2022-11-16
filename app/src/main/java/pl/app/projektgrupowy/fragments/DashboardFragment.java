@@ -41,4 +41,11 @@ public class DashboardFragment extends Fragment {
         helloMsg.setText(mainActivity.getToken());
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        helloMsg.setText(mainActivity.getToken());
+    }
+
 }

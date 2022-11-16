@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:textColor="@color/black"
-
+                android:inputType="text"
                 android:textColorHint="#546E7A" />
         </com.google.android.material.textfield.TextInputLayout>
 

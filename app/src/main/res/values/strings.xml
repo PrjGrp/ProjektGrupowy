@@ -32,10 +32,6 @@
 
     <string name="UIAddItemText">Dodaj tekst do tłumacza:</string>
     <string name="add_button">Dodaj</string>
-    <string-array name="languagesList">
-        <item>polski</item>
-        <item>angielski</item>
-    </string-array>
     <string name="nothingSelected">Nic nie zaznaczono</string>
 
 

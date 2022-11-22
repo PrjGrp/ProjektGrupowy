@@ -3,11 +3,6 @@
     <string name="app_name">ProjektGrupowy</string>
     <string name="REST_API_URL">https://backendprjgrp.azurewebsites.net</string>
 
-    <!-- Strings for mock activity -->
-    <string name="mock_dialog_1">Czekam na randomowy fakt...</string>
-    <string name="mock_button_1">Pobierz fakt</string>
-    <string name="mock_exception_1">Błąd pobierania</string>
-
     <!-- Strings for Toolbar -->
     <string name="title_toolbar_dashboard">Tłumaczenia</string>
     <string name="title_toolbar_add">Dodaj</string>
@@ -18,6 +13,7 @@
     <string name="login_button">Zaloguj</string>
     <string name="login_awaiting">Czekam na odpowiedź...</string>
     <string name="login_failed">Nie udało się zalogować</string>
+    <string name="login_error">Błąd podczas logowania</string>
     <string name="login_success">Logowanie zakończone sukcesem</string>
     <string name="login_insufficient_data">Wszystkie pola wymagane</string>
     <string name="login_username_hint">Nazwa użytkownika</string>
@@ -30,13 +26,13 @@
 
     <!-- Strings for AddFragment -->
 
-    <string name="UIAddItemText">Dodaj tekst do tłumacza:</string>
+    <string name="add_item">Dodaj tekst do tłumacza:</string>
     <string name="add_button">Dodaj</string>
-    <string-array name="languagesList">
+    <string-array name="add_languages_list">
         <item>polski</item>
         <item>angielski</item>
     </string-array>
-    <string name="nothingSelected">Nic nie zaznaczono</string>
+    <string name="add_nothing_selected">Nic nie zaznaczono</string>
 
 
 

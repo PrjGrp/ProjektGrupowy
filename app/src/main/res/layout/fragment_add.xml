@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+
     android:gravity="center"
     tools:context=".fragments.AddFragment">
 
@@ -13,7 +13,7 @@
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,8 +53,8 @@
             android:layout_width="408dp"
             android:layout_height="339dp"
             android:layout_marginTop="52dp"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
             android:ems="10"
             android:gravity="start|top"
             android:inputType="textMultiLine"
@@ -96,15 +96,18 @@
     <Button
         android:id="@+id/addButton"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="123dp"
-        android:layout_height="68dp"
-        android:textSize="20dp"
-
+        android:layout_width="146dp"
+        android:layout_height="88dp"
+        android:layout_marginBottom="72dp"
 
         android:text="@string/add_button"
+
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.788"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+        app:layout_constraintTop_toTopOf="@+id/constraintLayout2"
+        app:layout_constraintVertical_bias="0.967" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,10 +15,12 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 import pl.app.projektgrupowy.MainActivity;
 import pl.app.projektgrupowy.R;
@@ -64,11 +66,20 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         sourceLanguageSpinner.setOnItemSelectedListener(this);
         targetLanguageSpinner.setOnItemSelectedListener(this);
 
+
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
         categories.add("en-GB");
         //categories.add("en-US");
         categories.add("pl-PL");
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mainActivity, R.array.add_languages_list, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        entryLanguageSpinner.setAdapter(adapter);
+        entryLanguageSpinner.setOnItemSelectedListener(this);
+        receivedLanguageSpinner.setAdapter(adapter);
+        receivedLanguageSpinner.setOnItemSelectedListener(this);
+
 
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mainActivity, android.R.layout.simple_spinner_item, categories);
@@ -118,6 +129,6 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        Toast.makeText(getActivity().getApplication(), getString(R.string.nothingSelected), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity().getApplication(), getString(R.string.add_nothing_selected), Toast.LENGTH_SHORT).show();
     }
 }

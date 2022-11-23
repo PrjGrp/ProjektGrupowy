@@ -27,8 +27,13 @@
             android:layout_width="321dp"
             android:layout_height="47dp"
             android:gravity="center"
+
             android:text="@string/UIAddItemText"
             android:textSize="20dp"
+
+            android:text="@string/add_item"
+            android:textSize="30dp"
+
             android:textStyle="bold"
 
 

@@ -151,7 +151,7 @@ public class LoginFragment extends Fragment {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                return getString(R.string.mock_exception_1);
+                return getString(R.string.login_error);
             }
             return result;
         }

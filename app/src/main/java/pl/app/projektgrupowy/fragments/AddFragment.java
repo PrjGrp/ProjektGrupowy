@@ -1,4 +1,6 @@
+
 package pl.app.projektgrupowy.fragments;
+
 
 import android.os.Bundle;
 
@@ -13,6 +15,13 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
 import pl.app.projektgrupowy.MainActivity;
 import pl.app.projektgrupowy.R;
 
@@ -24,8 +33,12 @@ import pl.app.projektgrupowy.R;
  * WAŻNE: Nie rób na razie komunikacji z backendem, po prostu poustawiaj ładnie pola, i zrób walidację
  * Ogranicz się proszę do zmian w plikach fragment_add.xml i AddFragment.java, jak będziesz chciał coś innego ruszać to daj znać, nie chce mi się później na tych mergach działać
  */
+
 public class AddFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private MainActivity mainActivity;// TUTAJ MASZ JUZ REFERENCJE DO ACTIVITY, NIE MUSISZ ZA KAZDYM RAZEM getActivity() wołac
+
+    private String sourceLanguageSpinnerValue = "";
+    private String targetLanguageSpinnerValue = "";
 
     public AddFragment() { super(R.layout.fragment_add); }
 
@@ -44,8 +57,21 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mainActivity = (MainActivity) getActivity();
 
-        Spinner entryLanguageSpinner = view.findViewById(R.id.entryLanguageList);
-        Spinner receivedLanguageSpinner = view.findViewById(R.id.receivedLanguageListLanguageList);
+        TextInputEditText editTextMultiLine = view.findViewById(R.id.editTextMultiLine);
+
+        final Spinner sourceLanguageSpinner = view.findViewById(R.id.sourceLanguageList);
+        final Spinner targetLanguageSpinner = view.findViewById(R.id.targetLanguageList);
+
+        // Spinner click listener
+        sourceLanguageSpinner.setOnItemSelectedListener(this);
+        targetLanguageSpinner.setOnItemSelectedListener(this);
+
+
+        // Spinner Drop down elements
+        List<String> categories = new ArrayList<String>();
+        categories.add("en-GB");
+        //categories.add("en-US");
+        categories.add("pl-PL");
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mainActivity, R.array.add_languages_list, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -55,11 +81,22 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         receivedLanguageSpinner.setOnItemSelectedListener(this);
 
 
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mainActivity, android.R.layout.simple_spinner_item, categories);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        sourceLanguageSpinner.setAdapter(dataAdapter);
+        targetLanguageSpinner.setAdapter(dataAdapter);
+
 
         Button addButton = (Button) view.findViewById(R.id.addButton);
 
         addButton.setOnClickListener(view1 -> {
 
+            editTextMultiLine.setText("dwadawdawdawdwda");
                  //  ...
         });
     }
@@ -67,12 +104,26 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
     /**
      *
-     Metody interfejsu wywoływane przy rozwinięciu jednej z dwóch list rozwijanych.
+     Metody interfejsu AdapterView.OnItemSelectedListener wywoływane przy rozwinięciu jednej z dwóch list rozwijanych.
      Pierwsza reaguje na zaznaczenie, a druga na rozwinięcie bez zaznaczenia
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        Spinner spinner = (Spinner) parent;
+
+        if(spinner.getId() == R.id.sourceLanguageList){
+            //do this
+            sourceLanguageSpinnerValue = parent.getSelectedItem().toString();
+        }
+        else if(spinner.getId() == R.id.targetLanguageList){
+            //do this
+            targetLanguageSpinnerValue = parent.getSelectedItem().toString();
+        }
+
+
         String text = parent.getItemAtPosition(position).toString();
+
         Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
     }
 

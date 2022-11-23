@@ -75,11 +75,6 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mainActivity, R.array.add_languages_list, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        entryLanguageSpinner.setAdapter(adapter);
-        entryLanguageSpinner.setOnItemSelectedListener(this);
-        receivedLanguageSpinner.setAdapter(adapter);
-        receivedLanguageSpinner.setOnItemSelectedListener(this);
-
 
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mainActivity, android.R.layout.simple_spinner_item, categories);

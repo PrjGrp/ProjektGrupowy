@@ -14,6 +14,10 @@ public class Segment {
         this.id = id;
     }
 
+    public String getTargetText() {
+        return targetText;
+    }
+
     public void translate(String translatedText) {
         targetText = translatedText;
     }

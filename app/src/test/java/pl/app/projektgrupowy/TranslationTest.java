@@ -11,7 +11,7 @@ import pl.app.projektgrupowy.assets.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class ExampleUnitTest {
+public class TranslationTest {
     private static Translation testTranslation = new Translation("Tytuł przykładowy",
             "To jest tłumaczenie, chcę sprawdzić, czy dobrze działa. A zwłaszcza, czy dobrze segmentuje.");
 

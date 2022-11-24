@@ -2,12 +2,26 @@ package pl.app.projektgrupowy.assets;
 
 import androidx.annotation.NonNull;
 
+import org.w3c.dom.CharacterData;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Klasa realizująca tłumaczenie
  *
- * TODO: Ulepszyć maszynkę do segmentowania, zrobić parsera xml
+ * TODO: Ulepszyć maszynkę do segmentowania
  */
 public class Translation {
     private static final String xliffHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
@@ -33,6 +47,50 @@ public class Translation {
         this.segments = segments;
     }
 
+    private Translation(NodeList titleNodes, NodeList segmentNodeList) {
+        Element titleElement = (Element) titleNodes.item(0);
+        int segmentNodeListLength = segmentNodeList.getLength();
+        Segment[] segments = new Segment[segmentNodeListLength];
+        StringBuilder sourceString = new StringBuilder();
+        String title;
+
+        for (int i = 0; i < segmentNodeListLength; i++) {
+            Element e = (Element) segmentNodeList.item(i);
+            int id = Integer.parseInt(e.getAttribute("id"));
+
+            NodeList sourceNodeList = e.getElementsByTagName("source");
+            NodeList targetNodeList = e.getElementsByTagName("target");
+            Element sourceElement = (Element) sourceNodeList.item(0);
+            Element targetElement = (Element) targetNodeList.item(0);
+            String source = getCharacterData(sourceElement);
+            String target = getCharacterData(targetElement);
+
+            Segment segment = new Segment(id, source);
+            segment.translate(target);
+            sourceString.append(source);
+
+            segments[i] = segment;
+        }
+
+        title = titleElement.getAttribute("original");
+
+        this.title = title;
+        this.sourceText = sourceString.toString();
+        this.segments = segments;
+    }
+
+    private static String getCharacterData(Element e) {
+        Node child = e.getFirstChild();
+        String result = "";
+
+        if (child instanceof CharacterData) {
+            CharacterData cd = (CharacterData) child;
+            result = cd.getData();
+        }
+
+        return result;
+    }
+
     public String getSourceText() {
         return sourceText;
     }
@@ -43,6 +101,27 @@ public class Translation {
         for (Segment s : segments) targetTextString.append(s.getTargetText());
 
         return targetTextString.toString();
+    }
+
+    public static Translation parseXliff(String xliff) {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        Translation translation = null;
+        try {
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(new InputSource(new StringReader(xliff)));
+            NodeList fileNodes = doc.getElementsByTagName("file");
+            NodeList segmentNodes = doc.getElementsByTagName("trans-unit");
+
+            translation = new Translation(fileNodes, segmentNodes);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        }
+
+        return translation;
     }
 
     @NonNull

@@ -24,6 +24,7 @@ import java.util.List;
 
 import pl.app.projektgrupowy.MainActivity;
 import pl.app.projektgrupowy.R;
+import pl.app.projektgrupowy.assets.Translation;
 
 /**
  * Klasa realizująca dodawanie fragmentów
@@ -90,8 +91,7 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         Button addButton = (Button) view.findViewById(R.id.addButton);
 
         addButton.setOnClickListener(view1 -> {
-
-            editTextMultiLine.setText("dwadawdawdawdwda");
+            Translation translation;
                  //  ...
         });
     }
@@ -119,11 +119,11 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
         String text = parent.getItemAtPosition(position).toString();
 
-        Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mainActivity, text, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        Toast.makeText(getActivity().getApplication(), getString(R.string.add_nothing_selected), Toast.LENGTH_SHORT).show();
+        Toast.makeText(mainActivity, getString(R.string.add_nothing_selected), Toast.LENGTH_SHORT).show();
     }
 }

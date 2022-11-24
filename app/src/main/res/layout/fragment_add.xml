@@ -41,7 +41,7 @@
             app:layout_constraintVertical_bias="0.07" />
 
         <Spinner
-            android:id="@+id/sourceLanguageList"
+            android:id="@+id/targetLanguageList"
             android:layout_width="140dp"
             android:layout_height="65dp"
             app:layout_constraintBottom_toTopOf="@+id/editTextMultiLine"
@@ -50,27 +50,26 @@
             app:layout_constraintTop_toBottomOf="@+id/addTextHeader" />
 
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextMultiLine"
-            android:layout_width="408dp"
-            android:layout_height="339dp"
+            android:layout_width="411dp"
+            android:layout_height="190dp"
             android:layout_marginTop="52dp"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
             android:ems="10"
-            android:gravity="start|top"
+            android:gravity="left"
             android:inputType="textMultiLine"
-            android:textSize="30dp"
+            android:lines="6"
+            android:maxLines="6"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:textSize="25dp"
             app:layout_constraintBottom_toTopOf="@android:id/content"
-
             app:layout_constraintEnd_toEndOf="@android:id/content"
             app:layout_constraintStart_toEndOf="@android:id/content"
-
-
             app:layout_constraintTop_toBottomOf="@+id/arrowRightImage" />
 
         <Spinner
-            android:id="@+id/targetLanguageList"
+            android:id="@+id/sourceLanguageList"
             android:layout_width="140dp"
             android:layout_height="65dp"
             app:layout_constraintBottom_toTopOf="@+id/editTextMultiLine"
@@ -78,19 +77,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addTextHeader" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/arrowRightImage"
             android:layout_width="96dp"
             android:layout_height="69dp"
-            android:background="#470909"
-            android:src="@drawable/ic_baseline_arrow_back_24"
+            android:icon="@drawable/ic_baseline_arrow_back_24"
             app:layout_constraintBottom_toTopOf="@+id/editTextMultiLine"
-            app:layout_constraintEnd_toEndOf="@+id/sourceLanguageList"
-            app:layout_constraintStart_toEndOf="@+id/targetLanguageList"
+            app:layout_constraintEnd_toEndOf="@+id/targetLanguageList"
+            app:layout_constraintStart_toEndOf="@+id/sourceLanguageList"
             app:layout_constraintTop_toBottomOf="@+id/addTextHeader"
             app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/ic_arrow_right"
-            tools:srcCompat="@drawable/ic_baseline_arrow_back_24" />
+            app:srcCompat="@drawable/ic_baseline_arrow_right_alt_24"
+            tools:srcCompat="@drawable/ic_baseline_arrow_right_alt_24" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -98,8 +96,8 @@
     <Button
         android:id="@+id/addButton"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="146dp"
-        android:layout_height="88dp"
+        android:layout_width="120dp"
+        android:layout_height="74dp"
         android:layout_marginBottom="72dp"
 
         android:text="@string/add_button"

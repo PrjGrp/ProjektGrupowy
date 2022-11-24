@@ -24,13 +24,13 @@ public class TranslationTest {
 
     private static final String translationHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
             "<xliff xmlns=\"urn:oasis:names:tc:xliff:document:1.2\" version=\"1.2\">" +
-            "<file datatype=\"plaintext\" original=\"Tytuł przykładowy\" source-language=\"en\" " +
-            "target-language=\"de\"><body>";
+            "<file datatype=\"plaintext\" original=\"Tytuł przykładowy\" source-language=\"pl-PL\" " +
+            "target-language=\"en-US\"><body>";
 
     private static final String translationFooter = "</body></file></xliff>";
 
     private static final Translation testTranslation = new Translation("Tytuł przykładowy",
-            sourceText);
+            sourceText, Translation.POLISH, Translation.AMERICAN_ENGLISH);
 
     private static final String segment0BeforeTrans = "<trans-unit id=\"0\" xmlns:sap=\"urn:x-sap:sls-mlt\"><source>" +
             "To jest tłumaczenie, chcę sprawdzić, czy dobrze działa.</source><target></target></trans-unit>";

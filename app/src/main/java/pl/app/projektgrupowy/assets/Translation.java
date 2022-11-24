@@ -24,18 +24,27 @@ import javax.xml.parsers.ParserConfigurationException;
  * TODO: Ulepszyć maszynkę do segmentowania
  */
 public class Translation {
+    public static final String BRITISH_ENGLISH = "en-GB";
+    public static final String AMERICAN_ENGLISH = "en-US";
+    public static final String POLISH = "pl-PL";
+    public static final String GERMAN = "de-DE";
+    public static final String AUSTRIAN = "de-AT";
+
+
     private static final String xliffHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
             "<xliff xmlns=\"urn:oasis:names:tc:xliff:document:1.2\" version=\"1.2\">" +
-            "<file datatype=\"plaintext\" original=\"%s\" source-language=\"en\" " +
-            "target-language=\"de\"><body>";
+            "<file datatype=\"plaintext\" original=\"%s\" source-language=\"%s\" " +
+            "target-language=\"%s\"><body>";
     private static final String xliffFooter = "</body></file></xliff>";
     private static final String splitRegex = "(?<=\\.)(?= )";
 
     private final String title;
     private final String sourceText;
+    private final String sourceLanguage;
+    private final String targetLanguage;
     public final Segment[] segments;
 
-    public Translation(String title, String sourceText) {
+    public Translation(String title, String sourceText, String sourceLanguage, String targetLanguage) {
         String[] segmentedSourceText = sourceText.split(splitRegex);
         int segmentsLength = segmentedSourceText.length;
         Segment[] segments = new Segment[segmentsLength];
@@ -44,6 +53,8 @@ public class Translation {
 
         this.title = title;
         this.sourceText = sourceText;
+        this.sourceLanguage = sourceLanguage;
+        this.targetLanguage = targetLanguage;
         this.segments = segments;
     }
 
@@ -52,7 +63,7 @@ public class Translation {
         int segmentNodeListLength = segmentNodeList.getLength();
         Segment[] segments = new Segment[segmentNodeListLength];
         StringBuilder sourceString = new StringBuilder();
-        String title;
+        String title, sourceLanguage, targetLanguage;
 
         for (int i = 0; i < segmentNodeListLength; i++) {
             Element e = (Element) segmentNodeList.item(i);
@@ -73,9 +84,13 @@ public class Translation {
         }
 
         title = titleElement.getAttribute("original");
+        sourceLanguage = titleElement.getAttribute("source-language");
+        targetLanguage = titleElement.getAttribute("target-language");
 
         this.title = title;
         this.sourceText = sourceString.toString();
+        this.sourceLanguage = sourceLanguage;
+        this.targetLanguage = targetLanguage;
         this.segments = segments;
     }
 
@@ -131,6 +146,6 @@ public class Translation {
 
         for (Segment s : segments) segmentsString.append(s.toString());
 
-        return String.format(xliffHeader, title) + segmentsString + xliffFooter;
+        return String.format(xliffHeader, title, sourceLanguage, targetLanguage) + segmentsString + xliffFooter;
     }
 }

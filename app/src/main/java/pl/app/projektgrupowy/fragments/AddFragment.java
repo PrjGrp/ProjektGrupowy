@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -55,9 +56,9 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mainActivity = (MainActivity) getActivity();
+        /*mainActivity = (MainActivity) getActivity();
 
-        TextInputEditText editTextMultiLine = view.findViewById(R.id.editTextMultiLine);
+        EditText editTextMultiLine = (EditText) view.findViewById(R.id.editTextMultiLine);
 
         final Spinner sourceLanguageSpinner = view.findViewById(R.id.sourceLanguageList);
         final Spinner targetLanguageSpinner = view.findViewById(R.id.targetLanguageList);
@@ -93,7 +94,7 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
             editTextMultiLine.setText("dwadawdawdawdwda");
                  //  ...
-        });
+        });*/
     }
 
 
@@ -105,7 +106,7 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        Spinner spinner = (Spinner) parent;
+        /*Spinner spinner = (Spinner) parent;
 
         if(spinner.getId() == R.id.sourceLanguageList){
             //do this
@@ -119,11 +120,11 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
         String text = parent.getItemAtPosition(position).toString();
 
-        Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();*/
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        Toast.makeText(getActivity().getApplication(), getString(R.string.add_nothing_selected), Toast.LENGTH_SHORT).show();
+        /*Toast.makeText(getActivity().getApplication(), getString(R.string.add_nothing_selected), Toast.LENGTH_SHORT).show();*/
     }
 }

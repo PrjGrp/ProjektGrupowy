@@ -84,10 +84,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.clear();
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
-        switch (currentFragment.getClass().getSimpleName()) {
+        String fragmentName = currentFragment.getClass().getSimpleName();
+        switch (fragmentName) {
             case "DashboardFragment": {
                 getMenuInflater().inflate(R.menu.toolbar_dashboard, menu);
                 toolbar.setTitle(R.string.title_toolbar_dashboard);
+                toolbar.setNavigationIcon(null);
                 break;
             }
             case "AddFragment": {
@@ -123,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_toolbar_dashboard_add: {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container_view, AddFragment.class, null)
+                        .add(R.id.fragment_container_view, AddFragment.class, null)
                         .setReorderingAllowed(true)
                         .addToBackStack("AddFragment")
                         .commit();

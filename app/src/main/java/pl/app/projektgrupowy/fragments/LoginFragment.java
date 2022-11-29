@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -25,7 +24,7 @@ import java.nio.charset.StandardCharsets;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import pl.app.projektgrupowy.MainActivity;
+import pl.app.projektgrupowy.main.MainActivity;
 import pl.app.projektgrupowy.R;
 
 /**
@@ -86,9 +85,7 @@ public class LoginFragment extends Fragment {
             progressDialog.dismiss();
             try {
                 if (!s.equals("")) {
-                    mainActivity.setToken(s);
-                    mainActivity.replaceLoginFragment();
-                    mainActivity.invalidateOptionsMenu();
+                    mainActivity.mainViewModel.getToken().setValue(s);
                     Toast.makeText(mainActivity.getApplication(), getString(R.string.login_success), Toast.LENGTH_SHORT).show();
                 }
                 else Toast.makeText(mainActivity.getApplication(), getString(R.string.login_failed), Toast.LENGTH_SHORT).show();

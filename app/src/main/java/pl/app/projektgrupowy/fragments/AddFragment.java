@@ -91,6 +91,7 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         Button addButton = (Button) view.findViewById(R.id.addButton);
 
         addButton.setOnClickListener(view1 -> {
+            //do wczytania
             Translation translation;
                  //  ...
         });

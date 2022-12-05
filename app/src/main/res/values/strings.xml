@@ -29,8 +29,6 @@
     <string name="add_item">Dodaj tekst do tłumacza:</string>
     <string name="add_button">Dodaj</string>
 
-    <string name="nothingSelected">Nic nie zaznaczono</string>
-
     <string-array name="add_languages_list">
         <item>polski</item>
         <item>angielski</item>

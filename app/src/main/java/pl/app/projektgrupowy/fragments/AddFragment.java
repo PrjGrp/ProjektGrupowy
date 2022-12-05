@@ -12,7 +12,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
+
+import java.util.ArrayList;
+import java.util.List;
 
 import pl.app.projektgrupowy.main.MainActivity;
 import pl.app.projektgrupowy.R;
@@ -50,7 +58,7 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        /*mainActivity = (MainActivity) getActivity();
+        mainActivity = (MainActivity) getActivity();
 
         EditText editTextMultiLine = (EditText) view.findViewById(R.id.editTextMultiLine);
 
@@ -106,7 +114,7 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        /*Spinner spinner = (Spinner) parent;
+        Spinner spinner = (Spinner) parent;
 
         if(spinner.getId() == R.id.sourceLanguageList){
             //jeśli zmiany zachodzą na lewym spinnerze
@@ -116,10 +124,6 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
             //jeśli zmiany zachodzą na prawym spinnerze
             targetLanguageSpinnerValue = parent.getSelectedItem().toString();
         }
-                // toast zmiany języka
-        String text = parent.getItemAtPosition(position).toString();
-        
-        Toast.makeText(mainActivity, text, Toast.LENGTH_SHORT).show();
     }
 
     @Override

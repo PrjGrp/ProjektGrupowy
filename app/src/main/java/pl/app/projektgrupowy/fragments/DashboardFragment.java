@@ -1,13 +1,11 @@
 package pl.app.projektgrupowy.fragments;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.JsonReader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +21,7 @@ import java.nio.charset.StandardCharsets;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import pl.app.projektgrupowy.MainActivity;
+import pl.app.projektgrupowy.main.MainActivity;
 import pl.app.projektgrupowy.R;
 
 /**
@@ -51,18 +49,13 @@ public class DashboardFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         mainActivity = (MainActivity) getActivity();
 
         helloMsg = (TextView) view.findViewById(R.id.dashboard_hello);
-        helloMsg.setText(mainActivity.getToken());
+        helloMsg.setText(mainActivity.mainViewModel.getToken().getValue());
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        helloMsg.setText(mainActivity.getToken());
-    }
 
     private class GetToken extends AsyncTask<String, String, String> {
         @Override
@@ -70,8 +63,6 @@ public class DashboardFragment extends Fragment {
             //progressDialog.dismiss();
             try {
                 if (!s.equals("")) {
-                    mainActivity.setToken(s);
-                    mainActivity.replaceLoginFragment();
                     mainActivity.invalidateOptionsMenu();
                     Toast.makeText(mainActivity.getApplication(), getString(R.string.login_success), Toast.LENGTH_SHORT).show();
                 }

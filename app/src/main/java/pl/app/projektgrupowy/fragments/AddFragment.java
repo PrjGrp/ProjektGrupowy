@@ -2,6 +2,8 @@
 package pl.app.projektgrupowy.fragments;
 
 
+import static pl.app.projektgrupowy.assets.Translation.*;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,6 +16,7 @@ import android.widget.AdapterView;
 
 import pl.app.projektgrupowy.main.MainActivity;
 import pl.app.projektgrupowy.R;
+import pl.app.projektgrupowy.assets.Translation;
 
 /**
  * Klasa realizująca dodawanie fragmentów
@@ -29,6 +32,8 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
     private String sourceLanguageSpinnerValue = "";
     private String targetLanguageSpinnerValue = "";
+    private static int count = 0;
+    Translation translation;
 
     public AddFragment() { super(R.layout.fragment_add); }
 
@@ -56,12 +61,13 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         sourceLanguageSpinner.setOnItemSelectedListener(this);
         targetLanguageSpinner.setOnItemSelectedListener(this);
 
-
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
-        categories.add("en-GB");
-        //categories.add("en-US");
-        categories.add("pl-PL");
+        categories.add(AMERICAN_ENGLISH);
+        categories.add(BRITISH_ENGLISH);
+        categories.add(POLISH);
+        categories.add(GERMAN);
+        categories.add(AUSTRIAN);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mainActivity, R.array.add_languages_list, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -81,9 +87,14 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
         addButton.setOnClickListener(view1 -> {
 
-            editTextMultiLine.setText("dwadawdawdawdwda");
-                 //  ...
-        });*/
+
+            // wczytanie tekstu z ustawieniami języka źródłowego i docelowego
+            translation = new Translation(Integer.toString(count++), String.valueOf(editTextMultiLine.getText()), sourceLanguageSpinnerValue, targetLanguageSpinnerValue);
+
+            // prezentacja wyniku obiektu translate (na razie w formie xliffa)
+            editTextMultiLine.setText(translation.toString());
+
+        });
     }
 
 
@@ -98,22 +109,21 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         /*Spinner spinner = (Spinner) parent;
 
         if(spinner.getId() == R.id.sourceLanguageList){
-            //do this
+            //jeśli zmiany zachodzą na lewym spinnerze
             sourceLanguageSpinnerValue = parent.getSelectedItem().toString();
         }
         else if(spinner.getId() == R.id.targetLanguageList){
-            //do this
+            //jeśli zmiany zachodzą na prawym spinnerze
             targetLanguageSpinnerValue = parent.getSelectedItem().toString();
         }
-
-
+                // toast zmiany języka
         String text = parent.getItemAtPosition(position).toString();
-
-        Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();*/
+        
+        Toast.makeText(mainActivity, text, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        /*Toast.makeText(getActivity().getApplication(), getString(R.string.add_nothing_selected), Toast.LENGTH_SHORT).show();*/
+        Toast.makeText(mainActivity, getString(R.string.add_nothing_selected), Toast.LENGTH_SHORT).show();
     }
 }

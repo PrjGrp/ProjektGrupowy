@@ -27,7 +27,7 @@ public class Segment {
     @Override
     public String toString() {
         return String.format("<trans-unit id=\"%d\" xmlns:sap=\"urn:x-sap:sls-mlt\">" +
-                "<source>%s</source><target>%s</target></trans-unit>", id, sourceText,
+                        "<source>%s</source><target>%s</target></trans-unit>", id, sourceText,
                 targetText == null ? "" : targetText);
     }
 }

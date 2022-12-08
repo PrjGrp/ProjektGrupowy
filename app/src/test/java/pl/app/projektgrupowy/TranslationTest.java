@@ -98,7 +98,7 @@ public class TranslationTest {
         translationString.append(segment1BeforeTrans);
         translationString.append(translationFooter);
 
-        Translation translationParsed = Translation.parseXliff(translationString.toString());
+        Translation translationParsed = Translation.parseXliff(translationString.toString(), 0);
 
         assertEquals(testTranslation.toString(), translationParsed.toString());
 
@@ -116,7 +116,7 @@ public class TranslationTest {
         testTranslation.segments[0].translate(translationSegment0);
         testTranslation.segments[1].translate(translationSegment1);
 
-        Translation translationParsed = Translation.parseXliff(translationString.toString());
+        Translation translationParsed = Translation.parseXliff(translationString.toString(), 0);
 
         assertEquals(testTranslation.toString(), translationParsed.toString());
     }
@@ -133,7 +133,7 @@ public class TranslationTest {
         testTranslation.segments[0].translate(translationSegment0);
         testTranslation.segments[1].translate(translationSegment1);
 
-        Translation translationParsed = Translation.parseXliff(translationString.toString());
+        Translation translationParsed = Translation.parseXliff(translationString.toString(), 0);
 
         assertEquals(testTranslation.getSourceText(), translationParsed.getSourceText());
     }

@@ -42,6 +42,7 @@ public class Translation {
     private final String sourceText;
     private final String sourceLanguage;
     private final String targetLanguage;
+    private final int id;
     public final Segment[] segments;
 
     public Translation(String title, String sourceText, String sourceLanguage, String targetLanguage) {
@@ -56,9 +57,10 @@ public class Translation {
         this.sourceLanguage = sourceLanguage;
         this.targetLanguage = targetLanguage;
         this.segments = segments;
+        this.id = 0;
     }
 
-    private Translation(NodeList titleNodes, NodeList segmentNodeList) {
+    private Translation(NodeList titleNodes, NodeList segmentNodeList, int id) {
         Element titleElement = (Element) titleNodes.item(0);
         int segmentNodeListLength = segmentNodeList.getLength();
         Segment[] segments = new Segment[segmentNodeListLength];
@@ -67,7 +69,7 @@ public class Translation {
 
         for (int i = 0; i < segmentNodeListLength; i++) {
             Element e = (Element) segmentNodeList.item(i);
-            int id = Integer.parseInt(e.getAttribute("id"));
+            int idSegment = Integer.parseInt(e.getAttribute("id"));
 
             NodeList sourceNodeList = e.getElementsByTagName("source");
             NodeList targetNodeList = e.getElementsByTagName("target");
@@ -76,7 +78,7 @@ public class Translation {
             String source = getCharacterData(sourceElement);
             String target = getCharacterData(targetElement);
 
-            Segment segment = new Segment(id, source);
+            Segment segment = new Segment(idSegment, source);
             segment.translate(target);
             sourceString.append(source);
 
@@ -92,6 +94,7 @@ public class Translation {
         this.sourceLanguage = sourceLanguage;
         this.targetLanguage = targetLanguage;
         this.segments = segments;
+        this.id = id;
     }
 
     private static String getCharacterData(Element e) {
@@ -106,6 +109,10 @@ public class Translation {
         return result;
     }
 
+    public int getId() { return id; }
+
+    public String getTitle() { return title; }
+
     public String getSourceText() {
         return sourceText;
     }
@@ -118,7 +125,7 @@ public class Translation {
         return targetTextString.toString();
     }
 
-    public static Translation parseXliff(String xliff) {
+    public static Translation parseXliff(String xliff, int id) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         Translation translation = null;
         try {
@@ -127,7 +134,7 @@ public class Translation {
             NodeList fileNodes = doc.getElementsByTagName("file");
             NodeList segmentNodes = doc.getElementsByTagName("trans-unit");
 
-            translation = new Translation(fileNodes, segmentNodes);
+            translation = new Translation(fileNodes, segmentNodes, id);
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (IOException e) {

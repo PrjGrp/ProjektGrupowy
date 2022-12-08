@@ -103,7 +103,6 @@ public class LoginFragment extends Fragment {
         protected String doInBackground(String... strings) {
             String result = "";
 
-
             try {
                 String username = strings[0];
                 String password = strings[1];

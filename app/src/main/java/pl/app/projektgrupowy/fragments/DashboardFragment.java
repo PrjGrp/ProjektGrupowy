@@ -1,5 +1,6 @@
 package pl.app.projektgrupowy.fragments;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.JsonReader;
@@ -18,9 +19,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import pl.app.projektgrupowy.assets.Translation;
 import pl.app.projektgrupowy.main.MainActivity;
 import pl.app.projektgrupowy.R;
 
@@ -30,7 +33,8 @@ import pl.app.projektgrupowy.R;
 public class DashboardFragment extends Fragment {
 
     private MainActivity mainActivity;
-    private TextView helloMsg;
+    private Translation[] dataSet;
+    private ProgressDialog progressDialog;
 
     public DashboardFragment() {
         super(R.layout.fragment_dashboard);
@@ -39,6 +43,9 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mainActivity = (MainActivity) getActivity();
+        LoadData loadData = new LoadData();
+        loadData.execute("");
     }
 
     @Override
@@ -48,69 +55,63 @@ public class DashboardFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mainActivity = (MainActivity) getActivity();
+    public void onViewCreated(View view, Bundle savedInstanceState) { super.onViewCreated(view, savedInstanceState); }
 
-        helloMsg = (TextView) view.findViewById(R.id.dashboard_hello);
-        helloMsg.setText(mainActivity.mainViewModel.getToken().getValue());
-    }
-
-
-    private class GetToken extends AsyncTask<String, String, String> {
+    private class LoadData extends AsyncTask<String, String, Translation[]> {
         @Override
-        protected void onPostExecute(String s) {
-            //progressDialog.dismiss();
-            try {
-                if (!s.equals("")) {
-                    mainActivity.invalidateOptionsMenu();
-                    Toast.makeText(mainActivity.getApplication(), getString(R.string.login_success), Toast.LENGTH_SHORT).show();
-                }
-                else Toast.makeText(mainActivity.getApplication(), getString(R.string.login_failed), Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        protected void onPostExecute(Translation[] result) {
+            progressDialog.dismiss();
+            dataSet = result;
         }
 
         @Override
-        protected String doInBackground(String... strings) {
-            String result = "";
-
+        protected Translation[] doInBackground(String ... string) {
+            ArrayList<Translation> translationsTemp = new ArrayList<>();
 
             try {
-                String username = strings[0];
-                String password = strings[1];
                 URL url;
                 HttpsURLConnection urlConnection = null;
                 try {
-                    url = new URL(getString(R.string.REST_API_URL) + "/Auth");
+                    url = new URL(getString(R.string.REST_API_URL) + "/Translation");
                     urlConnection = (HttpsURLConnection) url.openConnection();
 
-                    urlConnection.setRequestMethod("POST");
-                    urlConnection.setRequestProperty("Content-Type", "application/json");
+                    urlConnection.setRequestMethod("GET");
                     urlConnection.setRequestProperty("Accept", "*/*");
-
-                    JSONObject jsonInput = new JSONObject();
-                    jsonInput.put("username", username);
-                    jsonInput.put("password", password);
-
-                    DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
-                    os.writeBytes(jsonInput.toString());
-                    os.flush();
-                    os.close();
+                    urlConnection.setRequestProperty("Authorization", "Bearer " + mainActivity.mainViewModel.getToken().getValue());
+                    urlConnection.setDoInput(true);
 
                     if (urlConnection.getResponseCode() == 200) {
                         InputStream response = urlConnection.getInputStream();
                         InputStreamReader responseReader = new InputStreamReader(response, StandardCharsets.UTF_8);
                         JsonReader jsonReader = new JsonReader(responseReader);
 
-                        jsonReader.beginObject();
-                        jsonReader.nextName();
-                        result = jsonReader.nextString();
-                        jsonReader.close();
+                        jsonReader.beginArray();
+                        while (jsonReader.hasNext()) {
+                            String xliff = "";
+                            int id = 0;
+                            jsonReader.beginObject();
+
+                            while (jsonReader.hasNext()) {
+                                String name = jsonReader.nextName();
+                                switch (name) {
+                                    case "translatedText":
+                                        xliff = jsonReader.nextString();
+                                        break;
+                                    case "id":
+                                        id = jsonReader.nextInt();
+                                        break;
+                                    default:
+                                        jsonReader.skipValue();
+                                }
+                            }
+                            jsonReader.endObject();
+                            translationsTemp.add(Translation.parseXliff(xliff, id));
+                        }
+                        jsonReader.endArray();
                     }
 
-                    return result;
+                    Translation[] result = new Translation[translationsTemp.size()];
+                    return translationsTemp.toArray(result);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -121,18 +122,17 @@ public class DashboardFragment extends Fragment {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                return getString(R.string.login_error);
             }
-            return result;
+            return null;
         }
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();/*
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getString(R.string.login_awaiting));
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(mainActivity);
+            progressDialog.setMessage(getString(R.string.dashboard_progress));
             progressDialog.setCancelable(false);
-            progressDialog.show();*/
+            progressDialog.show();
 
         }
     }

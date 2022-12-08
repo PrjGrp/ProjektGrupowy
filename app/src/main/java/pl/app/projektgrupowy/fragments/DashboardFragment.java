@@ -11,6 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONObject;
 
@@ -20,6 +22,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.concurrent.RecursiveAction;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -35,6 +38,8 @@ public class DashboardFragment extends Fragment {
     private MainActivity mainActivity;
     private Translation[] dataSet;
     private ProgressDialog progressDialog;
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
 
     public DashboardFragment() {
         super(R.layout.fragment_dashboard);
@@ -48,10 +53,23 @@ public class DashboardFragment extends Fragment {
         loadData.execute("");
     }
 
+    /**
+     * TODO Zrobić custom adaptera, layout elementów listy itd.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_dashboard, container, false);
+        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        recyclerView = (RecyclerView) root.findViewById(R.id.dashboard_recycler_view);
+        layoutManager = new LinearLayoutManager(mainActivity);
+
+        recyclerView.setLayoutManager(layoutManager);
+
+        return root;
     }
 
     @Override

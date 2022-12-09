@@ -1,5 +1,7 @@
 package pl.app.projektgrupowy.fragments;
 
+import static java.lang.Thread.currentThread;
+
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,12 +28,14 @@ import java.util.concurrent.RecursiveAction;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import pl.app.projektgrupowy.adapters.DashboardAdapter;
 import pl.app.projektgrupowy.assets.Translation;
 import pl.app.projektgrupowy.main.MainActivity;
 import pl.app.projektgrupowy.R;
 
 /**
  * Dashboard z tłumaczeniami
+ * TODO Dorobic ViewModel dla listy tlumaczen
  */
 public class DashboardFragment extends Fragment {
 
@@ -40,6 +44,8 @@ public class DashboardFragment extends Fragment {
     private ProgressDialog progressDialog;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
+    private DashboardAdapter adapter;
+    private View root;
 
     public DashboardFragment() {
         super(R.layout.fragment_dashboard);
@@ -53,22 +59,10 @@ public class DashboardFragment extends Fragment {
         loadData.execute("");
     }
 
-    /**
-     * TODO Zrobić custom adaptera, layout elementów listy itd.
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
-     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        recyclerView = (RecyclerView) root.findViewById(R.id.dashboard_recycler_view);
-        layoutManager = new LinearLayoutManager(mainActivity);
-
-        recyclerView.setLayoutManager(layoutManager);
-
+        root = inflater.inflate(R.layout.fragment_dashboard, container, false);
         return root;
     }
 
@@ -80,6 +74,13 @@ public class DashboardFragment extends Fragment {
         protected void onPostExecute(Translation[] result) {
             progressDialog.dismiss();
             dataSet = result;
+            recyclerView = (RecyclerView) root.findViewById(R.id.dashboard_recycler_view);
+            layoutManager = new LinearLayoutManager(mainActivity);
+
+            recyclerView.setLayoutManager(layoutManager);
+
+            adapter = new DashboardAdapter(dataSet);
+            recyclerView.setAdapter(adapter);
         }
 
         @Override

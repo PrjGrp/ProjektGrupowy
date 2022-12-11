@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import pl.app.projektgrupowy.R;
+import pl.app.projektgrupowy.adapters.DashboardAdapter;
 import pl.app.projektgrupowy.fragments.AddFragment;
 import pl.app.projektgrupowy.fragments.DashboardFragment;
 import pl.app.projektgrupowy.fragments.LoginFragment;
@@ -29,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
+    private String getTopFragmentName() {
+        return getSupportFragmentManager().findFragmentById(R.id.fragment_container_view).getClass().getSimpleName();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,25 +44,32 @@ public class MainActivity extends AppCompatActivity {
 
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         mainViewModel.getToken().observe(this, newVal -> {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.popBackStack();
+
             if (MainViewModel.LOGGED_OUT.equals(newVal)) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.popBackStack();
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container_view, LoginFragment.class, null)
                         .setReorderingAllowed(true)
                         .commit();
                 toolbar.setTitle(R.string.app_name);
                 toolbar.setNavigationIcon(null);
-                savePreferences(newVal);
             } else {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.popBackStack();
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container_view, DashboardFragment.class, null)
                         .setReorderingAllowed(true)
                         .commit();
                 invalidateOptionsMenu();
-                savePreferences(newVal);
+            }
+
+            savePreferences(newVal);
+        });
+
+        mainViewModel.getDataSet().observe(this, newVal -> {
+            if (getTopFragmentName().equals("DashboardFragment")) {
+                DashboardFragment dashboardFragment = (DashboardFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
+                dashboardFragment.setRecyclerViewAdapter(newVal);
             }
         });
 
@@ -77,8 +89,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.clear();
-        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
-        String fragmentName = currentFragment.getClass().getSimpleName();
+        String fragmentName = getTopFragmentName();
         switch (fragmentName) {
             case "DashboardFragment": {
                 getMenuInflater().inflate(R.menu.toolbar_dashboard, menu);

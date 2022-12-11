@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.JsonReader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,14 +34,10 @@ import pl.app.projektgrupowy.assets.Translation;
 import pl.app.projektgrupowy.main.MainActivity;
 import pl.app.projektgrupowy.R;
 
-/**
- * Dashboard z tłumaczeniami
- * TODO Dorobic ViewModel dla listy tlumaczen
- */
+
 public class DashboardFragment extends Fragment {
 
     private MainActivity mainActivity;
-    private Translation[] dataSet;
     private ProgressDialog progressDialog;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -51,36 +48,45 @@ public class DashboardFragment extends Fragment {
         super(R.layout.fragment_dashboard);
     }
 
+    public void setRecyclerViewAdapter(Translation[] dataSet) {
+        DashboardAdapter adapter = new DashboardAdapter(dataSet);
+        recyclerView.setAdapter(adapter);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainActivity = (MainActivity) getActivity();
-        LoadData loadData = new LoadData();
-        loadData.execute("");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        recyclerView = (RecyclerView) root.findViewById(R.id.dashboard_recycler_view);
+        layoutManager = new LinearLayoutManager(mainActivity);
+        recyclerView.setLayoutManager(layoutManager);
         return root;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) { super.onViewCreated(view, savedInstanceState); }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Translation[] dataSet = mainActivity.mainViewModel.getDataSet().getValue();
+        if (dataSet == null) {
+            LoadData loadData = new LoadData();
+            loadData.execute("");
+        } else setRecyclerViewAdapter(dataSet);
+    }
+
     private class LoadData extends AsyncTask<String, String, Translation[]> {
         @Override
         protected void onPostExecute(Translation[] result) {
             progressDialog.dismiss();
-            dataSet = result;
-            recyclerView = (RecyclerView) root.findViewById(R.id.dashboard_recycler_view);
-            layoutManager = new LinearLayoutManager(mainActivity);
-
-            recyclerView.setLayoutManager(layoutManager);
-
-            adapter = new DashboardAdapter(dataSet);
-            recyclerView.setAdapter(adapter);
+            mainActivity.mainViewModel.getDataSet().setValue(result);
         }
 
         @Override
@@ -149,7 +155,7 @@ public class DashboardFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             progressDialog = new ProgressDialog(mainActivity);
-            progressDialog.setMessage(getString(R.string.dashboard_progress));
+            progressDialog.setMessage(mainActivity.getString(R.string.dashboard_progress));
             progressDialog.setCancelable(false);
             progressDialog.show();
 

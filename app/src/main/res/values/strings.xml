@@ -27,12 +27,12 @@
     <!-- Strings for AddFragment -->
 
     <string name="add_item">Dodaj tekst do tłumacza:</string>
+    <string name="add_item_title">Wprowadź tekst:</string>
+
     <string name="add_button">Dodaj</string>
 
-    <string-array name="add_languages_list">
-        <item>polski</item>
-        <item>angielski</item>
-    </string-array>
+    <string name="add_text_invalid">Nie dodano tekstu do tłumaczenia</string>
+    <string name="add_text_error">Nie udało się przesłać tekstu do tłumaczenia</string>
     <string name="add_nothing_selected">Nic nie zaznaczono</string>
 
 

@@ -14,7 +14,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -44,17 +43,41 @@
             android:id="@+id/targetLanguageList"
             android:layout_width="140dp"
             android:layout_height="65dp"
-            app:layout_constraintBottom_toTopOf="@+id/editTextMultiLine"
+            app:layout_constraintBottom_toTopOf="@+id/addTextTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/arrowRightImage"
             app:layout_constraintTop_toBottomOf="@+id/addTextHeader" />
 
 
+        <TextView
+            android:id="@+id/addTextTitle"
+            android:layout_width="321dp"
+            android:layout_height="47dp"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingTop="20dp"
+            android:paddingRight="20dp"
+
+
+            android:text="@string/add_item_title"
+            android:textSize="20dp"
+
+            android:textStyle="bold"
+
+            app:layout_constraintBottom_toTopOf="@+id/editTextMultiLine"
+
+
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/arrowRightImage" />
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextMultiLine"
             android:layout_width="411dp"
-            android:layout_height="190dp"
-            android:layout_marginTop="52dp"
+            android:layout_height="220dp"
+            android:layout_marginTop="5dp"
             android:ems="10"
             android:gravity="left"
             android:inputType="textMultiLine"
@@ -62,17 +85,17 @@
             android:maxLines="6"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:textSize="25dp"
+            android:textSize="20dp"
             app:layout_constraintBottom_toTopOf="@android:id/content"
             app:layout_constraintEnd_toEndOf="@android:id/content"
             app:layout_constraintStart_toEndOf="@android:id/content"
-            app:layout_constraintTop_toBottomOf="@+id/arrowRightImage" />
+            app:layout_constraintTop_toBottomOf="@+id/addTextTitle" />
 
         <Spinner
             android:id="@+id/sourceLanguageList"
             android:layout_width="140dp"
             android:layout_height="65dp"
-            app:layout_constraintBottom_toTopOf="@+id/editTextMultiLine"
+            app:layout_constraintBottom_toTopOf="@+id/addTextTitle"
             app:layout_constraintEnd_toStartOf="@+id/arrowRightImage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addTextHeader" />
@@ -82,7 +105,7 @@
             android:layout_width="96dp"
             android:layout_height="69dp"
             android:icon="@drawable/ic_baseline_arrow_back_24"
-            app:layout_constraintBottom_toTopOf="@+id/editTextMultiLine"
+            app:layout_constraintBottom_toTopOf="@+id/addTextTitle"
             app:layout_constraintEnd_toEndOf="@+id/targetLanguageList"
             app:layout_constraintStart_toEndOf="@+id/sourceLanguageList"
             app:layout_constraintTop_toBottomOf="@+id/addTextHeader"

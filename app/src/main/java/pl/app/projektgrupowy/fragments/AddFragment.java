@@ -4,10 +4,12 @@ package pl.app.projektgrupowy.fragments;
 
 import static pl.app.projektgrupowy.assets.Translation.*;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.JsonReader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +21,17 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
+import org.json.JSONObject;
+
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import pl.app.projektgrupowy.main.MainActivity;
 import pl.app.projektgrupowy.R;
@@ -77,8 +88,8 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         categories.add(GERMAN);
         categories.add(AUSTRIAN);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mainActivity, R.array.add_languages_list, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mainActivity, R.array.add_languages_list, android.R.layout.simple_spinner_item);
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mainActivity, android.R.layout.simple_spinner_item, categories);
@@ -100,14 +111,21 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
             translation = new Translation(Integer.toString(count++), String.valueOf(editTextMultiLine.getText()), sourceLanguageSpinnerValue, targetLanguageSpinnerValue);
 
             // prezentacja wyniku obiektu translate (na razie w formie xliffa)
-            editTextMultiLine.setText(translation.toString());
+            //editTextMultiLine.setText(translation.toString());
+            editTextMultiLine.setText(translation.getSourceText());
 
+
+            SendToTranslate sendToTranslate = new SendToTranslate();
+
+            //Czy jest poprawnie ??:
+            if(!translation.getSourceText().equals("")) sendToTranslate.execute(Integer.toString(count++), "Tomek", translation.toString());
+
+            else Toast.makeText(getActivity().getApplication(), getString(R.string.add_text_invalid), Toast.LENGTH_SHORT).show();
         });
     }
 
 
     /**
-     *
      Metody interfejsu AdapterView.OnItemSelectedListener wywoływane przy rozwinięciu jednej z dwóch list rozwijanych.
      Pierwsza reaguje na zaznaczenie, a druga na rozwinięcie bez zaznaczenia
      */
@@ -130,4 +148,97 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
     public void onNothingSelected(AdapterView<?> parent) {
         Toast.makeText(mainActivity, getString(R.string.add_nothing_selected), Toast.LENGTH_SHORT).show();
     }
+
+     private class SendToTranslate extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPostExecute(String s) {
+            //progressDialog.dismiss();
+
+            // czy wprowadzać tu toast po wczytaniu ?
+            /*
+            try {
+                if (!s.equals("")) {
+                    mainActivity.invalidateOptionsMenu();     //zmienic toast
+                    Toast.makeText(mainActivity.getApplication(), getString(R.string.login_success), Toast.LENGTH_SHORT).show();
+                }
+                else Toast.makeText(mainActivity.getApplication(), getString(R.string.login_failed), Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            */
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String result = "";
+
+
+            try {
+                String id = strings[0];
+                String userId = strings[1];
+                String text = strings[2];
+                URL url;
+                HttpsURLConnection urlConnection = null;
+                try {
+                    url = new URL(getString(R.string.REST_API_URL) + "/Translation");
+                    urlConnection = (HttpsURLConnection) url.openConnection();
+
+                    urlConnection.setRequestMethod("POST");
+                    urlConnection.setRequestProperty("Content-Type", "application/json");
+                    urlConnection.setRequestProperty("Accept", "*/*");
+
+                    JSONObject jsonInput = new JSONObject();
+                    jsonInput.put("id", id);
+                    jsonInput.put("userId", userId); // można puste
+                    jsonInput.put("text", text);
+                    //jsonInput.put("translatedText", username);  // w tym fragmencie pusty wysłać
+                    // gdzie wczytać ma się tekst i czy na pewno put
+                                                // gdzie klase abstrakcyją użyć - moze wzorowac sie na aktiwitis
+
+                    DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
+                    os.writeBytes(jsonInput.toString());
+                    os.flush();
+                    os.close();
+
+                    if (urlConnection.getResponseCode() == 200) {
+                        InputStream response = urlConnection.getInputStream();
+                        InputStreamReader responseReader = new InputStreamReader(response, StandardCharsets.UTF_8);
+                        JsonReader jsonReader = new JsonReader(responseReader);
+
+                        jsonReader.beginObject();
+                        jsonReader.nextName();
+                        result = jsonReader.nextString();
+                        jsonReader.close();
+                    }
+
+                    return result;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (urlConnection != null) {
+                        urlConnection.disconnect();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return getString(R.string.add_text_error);
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();/*
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage(getString(R.string.login_awaiting));
+            progressDialog.setCancelable(false);
+            progressDialog.show();*/
+
+        }
+    }
+
+
+
 }

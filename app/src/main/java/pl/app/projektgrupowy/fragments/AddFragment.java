@@ -156,18 +156,20 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         protected void onPostExecute(String s) {
             progressDialog.dismiss();
 
-            FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_view, DashboardFragment.class, null) //DashboardFragment.class
-                    .setReorderingAllowed(true)
-                    .commit();
                     // Wyrzuca błędem java.lang.Class java.lang.Object.getClass() :
             //FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
             //Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container_view);
             //fragmentManager.beginTransaction().remove(fragment).commit();
 
             try {
-                if (!s.equals("")) {
+                if (!s.equals("")) { /** jeśli jest odpoweidź z bazy widok przechodzi na dashbord */
+                    FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container_view, DashboardFragment.class, null) //DashboardFragment.class
+                            .setReorderingAllowed(true)
+                            .commit();
+
+
                     mainActivity.invalidateOptionsMenu();
                     Toast.makeText(mainActivity.getApplication(), getString(R.string.add_post_async_respond), Toast.LENGTH_SHORT).show();
                 }
@@ -176,36 +178,36 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                 e.printStackTrace();
             }
 
-
         }
 
         @Override
         protected String doInBackground(String... strings) {
             String result = "";
 
-            try {   /** brak relacji z bazą bez tablicy z 4 */
-                String id = strings[0];
-                String userId = strings[1];
-                String text = strings[2];
-                String translatedText = strings[3];
+            try {
+                String text = strings[0];
+                String translatedText = strings[1];
 
                 URL url;
                 HttpsURLConnection urlConnection = null;
                 try {
+
                     url = new URL(getString(R.string.REST_API_URL) + "/Translation");
                     urlConnection = (HttpsURLConnection) url.openConnection();
 
                     urlConnection.setRequestMethod("POST");
-                    urlConnection.setRequestProperty("Content-Type", "application/json");
                     urlConnection.setRequestProperty("Accept", "*/*");
+                    urlConnection.setRequestProperty("Authorization", "Bearer " + mainActivity.mainViewModel.getToken().getValue());
+                    urlConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setDoInput(true);
 
                     JSONObject jsonInput = new JSONObject();
-                    jsonInput.put("text", text);
-                    jsonInput.put("translatedText", translatedText); // można puste
-                    //jsonInput.put("translatedText", username);  // w tym fragmencie pusty wysłać
-                    // gdzie wczytać ma się tekst i czy na pewno put
-                                                // gdzie klase abstrakcyją użyć - moze wzorowac sie na aktiwitis
+                    //jsonInput.put("id", 0);
+                    //jsonInput.put("userId", 0);
 
+                    jsonInput.put("text", text);
+                    jsonInput.put("translatedText", translatedText);
                     DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
                     os.writeBytes(jsonInput.toString());
                     os.flush();
@@ -248,7 +250,5 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
         }
     }
-
-
 
 }

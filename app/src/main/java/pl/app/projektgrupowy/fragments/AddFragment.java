@@ -4,10 +4,12 @@ package pl.app.projektgrupowy.fragments;
 
 import static pl.app.projektgrupowy.assets.Translation.*;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.util.JsonReader;
 import android.view.LayoutInflater;
@@ -49,6 +51,7 @@ import pl.app.projektgrupowy.assets.Translation;
 public class AddFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private MainActivity mainActivity;// TUTAJ MASZ JUZ REFERENCJE DO ACTIVITY, NIE MUSISZ ZA KAZDYM RAZEM getActivity() wołac
 
+    private ProgressDialog progressDialog;
     private String sourceLanguageSpinnerValue = "";
     private String targetLanguageSpinnerValue = "";
     private static int count = 0;
@@ -112,13 +115,12 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
             // prezentacja wyniku obiektu translate (na razie w formie xliffa)
             //editTextMultiLine.setText(translation.toString());
-            editTextMultiLine.setText(translation.getSourceText());
+            //editTextMultiLine.setText(translation.getSourceText());
 
 
-            SendToTranslate sendToTranslate = new SendToTranslate();
+            SendToDB sendToDB = new SendToDB();
 
-            //Czy jest poprawnie ??:
-            if(!translation.getSourceText().equals("")) sendToTranslate.execute(Integer.toString(count++), "Tomek", translation.toString());
+            if(!translation.getSourceText().equals("")) sendToDB.execute(translation.getSourceText(), translation.toString());
 
             else Toast.makeText(getActivity().getApplication(), getString(R.string.add_text_invalid), Toast.LENGTH_SHORT).show();
         });
@@ -149,53 +151,63 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         Toast.makeText(mainActivity, getString(R.string.add_nothing_selected), Toast.LENGTH_SHORT).show();
     }
 
-     private class SendToTranslate extends AsyncTask<String, String, String> {
+     private class SendToDB extends AsyncTask<String, String, String> {
         @Override
         protected void onPostExecute(String s) {
-            //progressDialog.dismiss();
+            progressDialog.dismiss();
 
-            // czy wprowadzać tu toast po wczytaniu ?
-            /*
+                    // Wyrzuca błędem java.lang.Class java.lang.Object.getClass() :
+            //FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
+            //Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container_view);
+            //fragmentManager.beginTransaction().remove(fragment).commit();
+
             try {
-                if (!s.equals("")) {
-                    mainActivity.invalidateOptionsMenu();     //zmienic toast
-                    Toast.makeText(mainActivity.getApplication(), getString(R.string.login_success), Toast.LENGTH_SHORT).show();
+                if (!s.equals("")) { /** jeśli jest odpoweidź z bazy widok przechodzi na dashbord */
+                    FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container_view, DashboardFragment.class, null) //DashboardFragment.class
+                            .setReorderingAllowed(true)
+                            .commit();
+
+
+                    mainActivity.invalidateOptionsMenu();
+                    Toast.makeText(mainActivity.getApplication(), getString(R.string.add_post_async_respond), Toast.LENGTH_SHORT).show();
                 }
-                else Toast.makeText(mainActivity.getApplication(), getString(R.string.login_failed), Toast.LENGTH_SHORT).show();
+                else Toast.makeText(mainActivity.getApplication(), getString(R.string.add_post_async_noRespond), Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            */
         }
 
         @Override
         protected String doInBackground(String... strings) {
             String result = "";
 
-
             try {
-                String id = strings[0];
-                String userId = strings[1];
-                String text = strings[2];
+                String text = strings[0];
+                String translatedText = strings[1];
+
                 URL url;
                 HttpsURLConnection urlConnection = null;
                 try {
+
                     url = new URL(getString(R.string.REST_API_URL) + "/Translation");
                     urlConnection = (HttpsURLConnection) url.openConnection();
 
                     urlConnection.setRequestMethod("POST");
-                    urlConnection.setRequestProperty("Content-Type", "application/json");
                     urlConnection.setRequestProperty("Accept", "*/*");
+                    urlConnection.setRequestProperty("Authorization", "Bearer " + mainActivity.mainViewModel.getToken().getValue());
+                    urlConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setDoInput(true);
 
                     JSONObject jsonInput = new JSONObject();
-                    jsonInput.put("id", id);
-                    jsonInput.put("userId", userId); // można puste
-                    jsonInput.put("text", text);
-                    //jsonInput.put("translatedText", username);  // w tym fragmencie pusty wysłać
-                    // gdzie wczytać ma się tekst i czy na pewno put
-                                                // gdzie klase abstrakcyją użyć - moze wzorowac sie na aktiwitis
+                    //jsonInput.put("id", 0);
+                    //jsonInput.put("userId", 0);
 
+                    jsonInput.put("text", text);
+                    jsonInput.put("translatedText", translatedText);
                     DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
                     os.writeBytes(jsonInput.toString());
                     os.flush();
@@ -230,15 +242,13 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();/*
+            super.onPreExecute();
             progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getString(R.string.login_awaiting));
+            progressDialog.setMessage(getString(R.string.add_dialog_async));
             progressDialog.setCancelable(false);
-            progressDialog.show();*/
+            progressDialog.show();
 
         }
     }
-
-
 
 }

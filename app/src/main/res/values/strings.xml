@@ -27,10 +27,13 @@
     <string name="add_item_title">Wprowadź tekst:</string>
 
     <string name="add_button">Dodaj</string>
+    <string name="add_dialog_async">Dodaję tłumaczenie...</string>
+    <string name="add_post_async_respond">Pomyślne wysłanie do bazy.</string>
+    <string name="add_post_async_noRespond">Brak informacji zwrotnej z bazy.</string>
 
-    <string name="add_text_invalid">Nie dodano tekstu do tłumaczenia</string>
-    <string name="add_text_error">Nie udało się przesłać tekstu do tłumaczenia</string>
-    <string name="add_nothing_selected">Nic nie zaznaczono</string>
+    <string name="add_text_invalid">Nie dodano tekstu do tłumaczenia.</string>
+    <string name="add_text_error">Nie udało się przesłać tekstu do tłumaczenia.</string>
+    <string name="add_nothing_selected">Nic nie zaznaczono.</string>
 
 
 

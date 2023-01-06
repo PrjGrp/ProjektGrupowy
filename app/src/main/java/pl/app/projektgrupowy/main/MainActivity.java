@@ -6,10 +6,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.prefs.Preferences;
 
 import pl.app.projektgrupowy.R;
 import pl.app.projektgrupowy.adapters.DashboardAdapter;
@@ -30,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    private String getTopFragmentName() {
+    public String getTopFragmentName() {
         return getSupportFragmentManager().findFragmentById(R.id.fragment_container_view).getClass().getSimpleName();
     }
 
@@ -39,15 +42,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (getPreferences(MODE_PRIVATE).getString("token", "").equals(""))
-            savePreferences(MainViewModel.LOGGED_OUT);
-
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         mainViewModel.getToken().observe(this, newVal -> {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.popBackStack();
 
-            if (MainViewModel.LOGGED_OUT.equals(newVal)) {
+            if (newVal.equals(MainViewModel.LOGGED_OUT) || newVal.equals("")) {
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container_view, LoginFragment.class, null)
                         .setReorderingAllowed(true)
@@ -61,24 +61,40 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
                 invalidateOptionsMenu();
             }
-
             savePreferences(newVal);
         });
 
         mainViewModel.getDataSet().observe(this, newVal -> {
-            if (getTopFragmentName().equals("DashboardFragment")) {
+            if (getTopFragmentName().equals("DashboardFragment") && newVal != null) {
                 DashboardFragment dashboardFragment = (DashboardFragment)
                         getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
                 dashboardFragment.setRecyclerViewAdapter(newVal);
             }
         });
 
-        mainViewModel.getToken().setValue(getPreferences(MODE_PRIVATE).getString("token", ""));
+        mainViewModel.getNewTranslation().observe(this, newVal -> {
+            if (getTopFragmentName().equals("AddFragment")) {
+                if (newVal == null) getSupportFragmentManager().popBackStack();
+            } else if (newVal != null) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("newTranslation", newVal);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container_view, AddFragment.class, bundle)
+                        .setReorderingAllowed(true)
+                        .addToBackStack("AddFragment")
+                        .commit();
+                invalidateOptionsMenu();
+            }
+        });
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-    }
 
+        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        mainViewModel.getToken().setValue(sharedPreferences.getString("token", ""));
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -100,7 +116,9 @@ public class MainActivity extends AppCompatActivity {
             case "AddFragment": {
                 getMenuInflater().inflate(R.menu.toolbar_add, menu);
                 toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
-                toolbar.setNavigationOnClickListener(view -> { super.onBackPressed(); });
+                toolbar.setNavigationOnClickListener(view -> {
+                    mainViewModel.getNewTranslation().setValue(null);
+                });
                 toolbar.setTitle(R.string.title_toolbar_add);
                 break;
             }
@@ -113,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_toolbar_dashboard_logout: {
                 mainViewModel.getToken().setValue(MainViewModel.LOGGED_OUT);
+                mainViewModel.getDataSet().setValue(null);
+                mainViewModel.getNewTranslation().setValue(null);
                 break;
             }
             case R.id.action_toolbar_dashboard_add: {

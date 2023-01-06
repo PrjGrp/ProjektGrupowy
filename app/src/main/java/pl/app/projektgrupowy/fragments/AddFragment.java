@@ -11,6 +11,8 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.JsonReader;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,9 +37,11 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import pl.app.projektgrupowy.assets.NewTranslation;
 import pl.app.projektgrupowy.main.MainActivity;
 import pl.app.projektgrupowy.R;
 import pl.app.projektgrupowy.assets.Translation;
+import pl.app.projektgrupowy.main.MainViewModel;
 
 /**
  * Klasa realizująca dodawanie fragmentów
@@ -50,12 +54,10 @@ import pl.app.projektgrupowy.assets.Translation;
 
 public class AddFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private MainActivity mainActivity;// TUTAJ MASZ JUZ REFERENCJE DO ACTIVITY, NIE MUSISZ ZA KAZDYM RAZEM getActivity() wołac
+    private MainViewModel mainViewModel;
 
     private ProgressDialog progressDialog;
-    private String sourceLanguageSpinnerValue = "";
-    private String targetLanguageSpinnerValue = "";
-    private static int count = 0;
-    Translation translation;
+    NewTranslation translation; // Nowy obiekt ad hoc
 
     public AddFragment() { super(R.layout.fragment_add); }
 
@@ -73,11 +75,18 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mainActivity = (MainActivity) getActivity();
+        mainViewModel = mainActivity.mainViewModel;
+        translation = new NewTranslation();
+        translation.title = "tytuł przykładowy"; // TODO: Usunąć
+        Bundle args;
+
+        try { args = requireArguments(); }
+        catch (Exception ex) { args = null; }; // Bundle, jesli fragment jest odtwarzany z MainViewModel
 
         EditText editTextMultiLine = (EditText) view.findViewById(R.id.editTextMultiLine);
-
         final Spinner sourceLanguageSpinner = view.findViewById(R.id.sourceLanguageList);
         final Spinner targetLanguageSpinner = view.findViewById(R.id.targetLanguageList);
+        Button addButton = (Button) view.findViewById(R.id.addButton);
 
         // Spinner click listener
         sourceLanguageSpinner.setOnItemSelectedListener(this);
@@ -91,9 +100,6 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         categories.add(GERMAN);
         categories.add(AUSTRIAN);
 
-        //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mainActivity, R.array.add_languages_list, android.R.layout.simple_spinner_item);
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mainActivity, android.R.layout.simple_spinner_item, categories);
 
@@ -104,28 +110,48 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         sourceLanguageSpinner.setAdapter(dataAdapter);
         targetLanguageSpinner.setAdapter(dataAdapter);
 
+        // Jesli fragment odtwarzany, nie tworzony na nowo, to ustawiamy odpowiednio dane
+        if (args != null) {
+            translation = (NewTranslation) args.getSerializable("newTranslation");
 
-        Button addButton = (Button) view.findViewById(R.id.addButton);
+            for (String category : categories)
+                if (category.equals(translation.sourceLanguage))
+                    sourceLanguageSpinner.setSelection(categories.indexOf(category));
+
+            for (String category : categories)
+                if (category.equals(translation.targetLanguage))
+                    targetLanguageSpinner.setSelection(categories.indexOf(category));
+
+            editTextMultiLine.setText(translation.sourceText);
+            // TODO: Ustawić tutaj tytuł tak jak ten editTextMultiLine
+        }
+
+        // Nasłuchiwacz dla tekstu źródłowego
+        editTextMultiLine.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                translation.sourceText = editable.toString();
+                mainViewModel.getNewTranslation().setValue(translation);
+            }
+        });
+
+        //TODO: Tutaj zrobić nasłuchiwacz dla pola tekstowego tytułu tak jak dla editTextmultiLine (zmienić tylko translation.sourceText = editable.toString();)
 
         addButton.setOnClickListener(view1 -> {
-
-
-            // wczytanie tekstu z ustawieniami języka źródłowego i docelowego
-            translation = new Translation(Integer.toString(count++), String.valueOf(editTextMultiLine.getText()), sourceLanguageSpinnerValue, targetLanguageSpinnerValue);
-
-            // prezentacja wyniku obiektu translate (na razie w formie xliffa)
-            //editTextMultiLine.setText(translation.toString());
-            //editTextMultiLine.setText(translation.getSourceText());
-
+            Translation translationProper = new Translation(translation.title, translation.sourceText, translation.sourceLanguage, translation.targetLanguage);
 
             SendToDB sendToDB = new SendToDB();
 
-            if(!translation.getSourceText().equals("")) sendToDB.execute(translation.getSourceText(), translation.toString());
-
+            if(translation.validate()) sendToDB.execute(translationProper.getSourceText(), translationProper.toString());
             else Toast.makeText(getActivity().getApplication(), getString(R.string.add_text_invalid), Toast.LENGTH_SHORT).show();
         });
     }
-
 
     /**
      Metody interfejsu AdapterView.OnItemSelectedListener wywoływane przy rozwinięciu jednej z dwóch list rozwijanych.
@@ -135,15 +161,12 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         Spinner spinner = (Spinner) parent;
+        String newVal = parent.getSelectedItem().toString();
 
-        if(spinner.getId() == R.id.sourceLanguageList){
-            //jeśli zmiany zachodzą na lewym spinnerze
-            sourceLanguageSpinnerValue = parent.getSelectedItem().toString();
-        }
-        else if(spinner.getId() == R.id.targetLanguageList){
-            //jeśli zmiany zachodzą na prawym spinnerze
-            targetLanguageSpinnerValue = parent.getSelectedItem().toString();
-        }
+        if(spinner.getId() == R.id.sourceLanguageList)
+            translation.sourceLanguage = newVal;
+        else if(spinner.getId() == R.id.targetLanguageList)
+            translation.targetLanguage = newVal;
     }
 
     @Override
@@ -156,21 +179,9 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         protected void onPostExecute(String s) {
             progressDialog.dismiss();
 
-                    // Wyrzuca błędem java.lang.Class java.lang.Object.getClass() :
-            //FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
-            //Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container_view);
-            //fragmentManager.beginTransaction().remove(fragment).commit();
-
             try {
-                if (!s.equals("")) { /** jeśli jest odpoweidź z bazy widok przechodzi na dashbord */
-                    FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container_view, DashboardFragment.class, null) //DashboardFragment.class
-                            .setReorderingAllowed(true)
-                            .commit();
-
-
-                    mainActivity.invalidateOptionsMenu();
+                if (!s.equals("")) {
+                    mainViewModel.getNewTranslation().setValue(null);
                     Toast.makeText(mainActivity.getApplication(), getString(R.string.add_post_async_respond), Toast.LENGTH_SHORT).show();
                 }
                 else Toast.makeText(mainActivity.getApplication(), getString(R.string.add_post_async_noRespond), Toast.LENGTH_SHORT).show();
@@ -191,7 +202,6 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                 URL url;
                 HttpsURLConnection urlConnection = null;
                 try {
-
                     url = new URL(getString(R.string.REST_API_URL) + "/Translation");
                     urlConnection = (HttpsURLConnection) url.openConnection();
 
@@ -224,10 +234,9 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                         jsonReader.close();
                     }
 
-                    return result;
-
                 } catch (Exception e) {
                     e.printStackTrace();
+                    return getString(R.string.add_text_error);
                 } finally {
                     if (urlConnection != null) {
                         urlConnection.disconnect();
@@ -237,6 +246,7 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                 e.printStackTrace();
                 return getString(R.string.add_text_error);
             }
+
             return result;
         }
 

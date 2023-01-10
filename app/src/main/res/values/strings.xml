@@ -8,6 +8,7 @@
     <string name="title_toolbar_add">Dodaj</string>
     <string name="action_toolbar_log_out">Wyloguj</string>
     <string name="action_toolbar_add">Dodaj</string>
+    <string name="action_toolbar_delete">Usuń</string>
 
     <!-- Strings for LoginFragment -->
     <string name="login_button">Zaloguj</string>
@@ -34,6 +35,11 @@
     <string name="add_text_invalid">Niektóre pola są puste</string>
     <string name="add_text_error">Nie udało się przesłać tekstu do tłumaczenia.</string>
     <string name="add_nothing_selected">Nic nie zaznaczono.</string>
+
+    <!-- Strings for TranslationFragment -->
+    <string name="translation_delete_async_success">Udało się usunąć tłumaczenie</string>
+    <string name="translation_delete_async_fail">Błąd komunikacji z bazą</string>
+    <string name="translation_delete_async_await">Usuwanie...</string>
 
 
 

@@ -1,6 +1,5 @@
 package pl.app.projektgrupowy.main;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -12,7 +11,10 @@ public class MainViewModel extends ViewModel {
 
     private MutableLiveData<String> token;
     private MutableLiveData<Translation[]> dataSet;
-    private MutableLiveData<NewTranslation> newTranslation;
+    private MutableLiveData<Boolean> newTranslation;
+    private MutableLiveData<Translation> editedTranslation;
+
+    private NewTranslation newTranslationData;
 
 
     public MutableLiveData<String> getToken() {
@@ -25,8 +27,21 @@ public class MainViewModel extends ViewModel {
         return dataSet;
     }
 
-    public MutableLiveData<NewTranslation> getNewTranslation() {
+    public MutableLiveData<Boolean> getNewTranslation() {
         if (newTranslation == null) newTranslation = new MutableLiveData<>();
         return newTranslation;
+    }
+
+    public MutableLiveData<Translation> getEditedTranslation() {
+        if (editedTranslation == null) editedTranslation = new MutableLiveData<>();
+        return editedTranslation;
+    }
+
+    public NewTranslation getNewTranslationData() {
+        return newTranslationData;
+    }
+
+    public void setNewTranslationData(NewTranslation newTranslationData) {
+        this.newTranslationData = newTranslationData;
     }
 }

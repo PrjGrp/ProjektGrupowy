@@ -1,5 +1,7 @@
 package pl.app.projektgrupowy.main;
 
+// TODO: dwa problemy 1. cofanie backbuttonem z dodawania 2. ten jebany callback z viewmodel dla dodawania
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -16,9 +18,12 @@ import java.util.prefs.Preferences;
 
 import pl.app.projektgrupowy.R;
 import pl.app.projektgrupowy.adapters.DashboardAdapter;
+import pl.app.projektgrupowy.assets.NewTranslation;
+import pl.app.projektgrupowy.assets.Translation;
 import pl.app.projektgrupowy.fragments.AddFragment;
 import pl.app.projektgrupowy.fragments.DashboardFragment;
 import pl.app.projektgrupowy.fragments.LoginFragment;
+import pl.app.projektgrupowy.fragments.TranslationFragment;
 
 /**
  * Klasa realizująca naszą główną Activity, ma tylko miejsce na fragmenty i toolbar.
@@ -47,11 +52,12 @@ public class MainActivity extends AppCompatActivity {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.popBackStack();
 
-            if (newVal.equals(MainViewModel.LOGGED_OUT) || newVal.equals("")) {
+            if (newVal.equals(MainViewModel.LOGGED_OUT) || newVal.equals("") || newVal == null) {
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container_view, LoginFragment.class, null)
                         .setReorderingAllowed(true)
                         .commit();
+
                 toolbar.setTitle(R.string.app_name);
                 toolbar.setNavigationIcon(null);
             } else {
@@ -59,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
                         .replace(R.id.fragment_container_view, DashboardFragment.class, null)
                         .setReorderingAllowed(true)
                         .commit();
-                invalidateOptionsMenu();
             }
             savePreferences(newVal);
         });
@@ -73,19 +78,23 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mainViewModel.getNewTranslation().observe(this, newVal -> {
-            if (getTopFragmentName().equals("AddFragment")) {
-                if (newVal == null) getSupportFragmentManager().popBackStack();
-            } else if (newVal != null) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("newTranslation", newVal);
-                FragmentManager fragmentManager = getSupportFragmentManager();
-
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container_view, AddFragment.class, bundle)
+            if (newVal.booleanValue()) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container_view, AddFragment.class, null)
                         .setReorderingAllowed(true)
                         .addToBackStack("AddFragment")
                         .commit();
-                invalidateOptionsMenu();
+
+            }
+        });
+
+        mainViewModel.getEditedTranslation().observe(this, newVal -> {
+            if (newVal != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container_view, TranslationFragment.class, null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack("TranslationFragment")
+                        .commit();
             }
         });
 
@@ -117,9 +126,21 @@ public class MainActivity extends AppCompatActivity {
                 getMenuInflater().inflate(R.menu.toolbar_add, menu);
                 toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
                 toolbar.setNavigationOnClickListener(view -> {
-                    mainViewModel.getNewTranslation().setValue(null);
+                    getSupportFragmentManager().popBackStack();
+                    mainViewModel.setNewTranslationData(null);
+                    mainViewModel.getNewTranslation().setValue(false);
                 });
                 toolbar.setTitle(R.string.title_toolbar_add);
+                break;
+            }
+            case "TranslationFragment": {
+                getMenuInflater().inflate(R.menu.toolbar_translation, menu);
+                toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
+                toolbar.setNavigationOnClickListener(view -> {
+                    getSupportFragmentManager().popBackStack();
+                    mainViewModel.getEditedTranslation().setValue(null);
+                });
+                toolbar.setTitle(mainViewModel.getEditedTranslation().getValue().getTitle());
                 break;
             }
         }
@@ -132,20 +153,32 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_toolbar_dashboard_logout: {
                 mainViewModel.getToken().setValue(MainViewModel.LOGGED_OUT);
                 mainViewModel.getDataSet().setValue(null);
-                mainViewModel.getNewTranslation().setValue(null);
+                mainViewModel.setNewTranslationData(null);
+                mainViewModel.getNewTranslation().setValue(false);
                 break;
             }
             case R.id.action_toolbar_dashboard_add: {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container_view, AddFragment.class, null)
-                        .setReorderingAllowed(true)
-                        .addToBackStack("AddFragment")
-                        .commit();
-                invalidateOptionsMenu();
+                mainViewModel.getNewTranslation().setValue(true);
+                break;
+            }
+            case R.id.action_toolbar_translation_delete: {
+                mainViewModel.getDataSet().setValue(null);
+                TranslationFragment translationFragment =
+                        (TranslationFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
+                translationFragment.delete();
                 break;
             }
         }
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        if (mainViewModel.getNewTranslation().getValue() != null) mainViewModel.getNewTranslation().setValue(false);
+        if (mainViewModel.getEditedTranslation().getValue() != null) mainViewModel.getEditedTranslation().setValue(null);
+    }
+
+
 }

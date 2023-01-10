@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 
 import androidx.annotation.NonNull;
 
-public class Segment {
+import java.io.Serializable;
+
+public class Segment implements Serializable {
     private final int id;
     private final String sourceText;
     private String targetText;

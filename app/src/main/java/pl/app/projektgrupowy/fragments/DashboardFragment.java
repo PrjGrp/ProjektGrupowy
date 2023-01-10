@@ -50,14 +50,16 @@ public class DashboardFragment extends Fragment {
     }
 
     public void setRecyclerViewAdapter(Translation[] dataSet) {
-        DashboardAdapter adapter = new DashboardAdapter(dataSet);
+        DashboardAdapter adapter = new DashboardAdapter(dataSet, mainActivity);
         recyclerView.setAdapter(adapter);
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainActivity = (MainActivity) getActivity();
+        mainActivity.invalidateOptionsMenu();
     }
 
     @Override

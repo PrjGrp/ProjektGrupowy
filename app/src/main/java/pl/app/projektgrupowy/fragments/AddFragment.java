@@ -1,6 +1,4 @@
-
 package pl.app.projektgrupowy.fragments;
-
 
 import static pl.app.projektgrupowy.assets.Translation.*;
 
@@ -9,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -64,6 +61,9 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mainActivity = (MainActivity) getActivity();
+
+        mainActivity.invalidateOptionsMenu();
     }
 
     @Override
@@ -74,14 +74,10 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mainActivity = (MainActivity) getActivity();
         mainViewModel = mainActivity.mainViewModel;
+        if (mainViewModel.getNewTranslationData() == null) mainViewModel.setNewTranslationData(new NewTranslation());
         translation = new NewTranslation();
         translation.title = "tytuł przykładowy"; // TODO: Usunąć
-        Bundle args;
-
-        try { args = requireArguments(); }
-        catch (Exception ex) { args = null; }; // Bundle, jesli fragment jest odtwarzany z MainViewModel
 
         EditText editTextMultiLine = (EditText) view.findViewById(R.id.editTextMultiLine);
         final Spinner sourceLanguageSpinner = view.findViewById(R.id.sourceLanguageList);
@@ -111,9 +107,8 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         targetLanguageSpinner.setAdapter(dataAdapter);
 
         // Jesli fragment odtwarzany, nie tworzony na nowo, to ustawiamy odpowiednio dane
-        if (args != null) {
-            translation = (NewTranslation) args.getSerializable("newTranslation");
-
+        translation = mainViewModel.getNewTranslationData();
+        if (translation != null) {
             for (String category : categories)
                 if (category.equals(translation.sourceLanguage))
                     sourceLanguageSpinner.setSelection(categories.indexOf(category));
@@ -137,7 +132,7 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
             @Override
             public void afterTextChanged(Editable editable) {
                 translation.sourceText = editable.toString();
-                mainViewModel.getNewTranslation().setValue(translation);
+                mainViewModel.setNewTranslationData(translation);
             }
         });
 
@@ -163,10 +158,12 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         Spinner spinner = (Spinner) parent;
         String newVal = parent.getSelectedItem().toString();
 
-        if(spinner.getId() == R.id.sourceLanguageList)
+        if (spinner.getId() == R.id.sourceLanguageList)
             translation.sourceLanguage = newVal;
-        else if(spinner.getId() == R.id.targetLanguageList)
+        else if (spinner.getId() == R.id.targetLanguageList)
             translation.targetLanguage = newVal;
+
+        mainViewModel.setNewTranslationData(translation);
     }
 
     @Override
@@ -181,7 +178,8 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
             try {
                 if (!s.equals("")) {
-                    mainViewModel.getNewTranslation().setValue(null);
+                    mainViewModel.getNewTranslation().setValue(false);
+                    mainActivity.getSupportFragmentManager().popBackStack();
                     Toast.makeText(mainActivity.getApplication(), getString(R.string.add_post_async_respond), Toast.LENGTH_SHORT).show();
                 }
                 else Toast.makeText(mainActivity.getApplication(), getString(R.string.add_post_async_noRespond), Toast.LENGTH_SHORT).show();

@@ -11,6 +11,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.util.ArrayList;
 
@@ -23,7 +24,7 @@ import javax.xml.parsers.ParserConfigurationException;
  *
  * TODO: Ulepszyć maszynkę do segmentowania
  */
-public class Translation {
+public class Translation implements Serializable {
     public static final String BRITISH_ENGLISH = "en-GB";
     public static final String AMERICAN_ENGLISH = "en-US";
     public static final String POLISH = "pl-PL";

@@ -11,9 +11,18 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.prefs.Preferences;
 
 import pl.app.projektgrupowy.R;
@@ -166,6 +175,22 @@ public class MainActivity extends AppCompatActivity {
                 TranslationFragment translationFragment =
                         (TranslationFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
                 translationFragment.delete();
+                break;
+            }
+            case R.id.action_toolbar_translation_save: {
+                Translation translation = mainViewModel.getEditedTranslation().getValue();
+                File file = new File (getExternalFilesDir("Tłumaczenia"),
+                        translation.getTitle().replace(" ", "_") + ".xml");
+                try {
+                    if (!file.exists()) file.createNewFile();
+                    FileWriter writer = new FileWriter(file.getAbsolutePath());
+                    writer.write(translation.toString());
+                    writer.close();
+                    Toast.makeText(this, R.string.translation_save_success, Toast.LENGTH_SHORT).show();
+                } catch (IOException ex) {
+                    Log.e("Błąd zapisywania pliku", ex.toString());
+                    Toast.makeText(this, R.string.translation_save_fail, Toast.LENGTH_SHORT).show();
+                }
                 break;
             }
         }

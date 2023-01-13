@@ -9,6 +9,7 @@
     <string name="action_toolbar_log_out">Wyloguj</string>
     <string name="action_toolbar_add">Dodaj</string>
     <string name="action_toolbar_delete">Usuń</string>
+    <string name="action_toolbar_save">Pobierz</string>
 
     <!-- Strings for LoginFragment -->
     <string name="login_button">Zaloguj</string>
@@ -40,6 +41,9 @@
     <string name="translation_delete_async_success">Udało się usunąć tłumaczenie</string>
     <string name="translation_delete_async_fail">Błąd komunikacji z bazą</string>
     <string name="translation_delete_async_await">Usuwanie...</string>
+    <string name="translation_save_success">Zapisano plik</string>
+    <string name="translation_save_fail">Nie udało się zapisać pliku</string>
+    <string name="translation_save_create_dir_fail">Nie udało się stworzyć katalogu</string>
 
 
 

@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
 
     android:gravity="center"
-    tools:context=".fragments.AddFragment">
+    tools:context=".fragments.AddFragment"
+    >
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,7 +18,7 @@
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -21,116 +26,132 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
+
         <TextView
-            android:id="@+id/addTextHeader"
-            android:layout_width="321dp"
+            android:id="@+id/addTextHeader2"
+            android:layout_width="0dp"
             android:layout_height="47dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="8dp"
+
+
+            android:layout_marginEnd="46dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/poppinsbold"
             android:gravity="center"
-
             android:text="@string/add_item"
-            android:textSize="20dp"
-
-            android:textStyle="bold"
-
-
-            app:layout_constraintBottom_toTopOf="@+id/arrowRightImage"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/editTextMultiLine"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.07" />
+            app:layout_constraintTop_toBottomOf="@+id/arrowRightImage" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/arrowRightImage"
+            android:layout_width="96dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:icon="@drawable/ic_baseline_arrow_back_24"
+            app:layout_constraintEnd_toStartOf="@+id/targetLanguageList"
+            app:layout_constraintStart_toEndOf="@+id/sourceLanguageList"
+            app:layout_constraintTop_toBottomOf="@+id/editTextTranslateTitle"
+            app:srcCompat="@drawable/ic_baseline_arrow_right_alt_24"
+            tools:srcCompat="@drawable/ic_baseline_arrow_right_alt_24" />
+
+        <Spinner
+            android:id="@+id/sourceLanguageList"
+            android:layout_width="140dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="24dp"
+
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="39dp"
+            android:background="@drawable/bg_spinner_language_list"
+            android:dropDownVerticalOffset="50dp"
+            app:layout_constraintBottom_toTopOf="@+id/addTextHeader2"
+            app:layout_constraintEnd_toStartOf="@+id/arrowRightImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextTranslateTitle"
+            app:layout_constraintVertical_bias="0.301"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <Spinner
             android:id="@+id/targetLanguageList"
             android:layout_width="140dp"
-            android:layout_height="65dp"
-            app:layout_constraintBottom_toTopOf="@+id/addTextTitle"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="38dp"
+            android:background="@drawable/bg_spinner_language_list"
+            android:dropDownVerticalOffset="50dp"
+            app:layout_constraintBottom_toTopOf="@+id/addTextHeader2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/arrowRightImage"
-            app:layout_constraintTop_toBottomOf="@+id/addTextHeader" />
-
-
-        <TextView
-            android:id="@+id/addTextTitle"
-            android:layout_width="321dp"
-            android:layout_height="47dp"
-            android:layout_marginTop="30dp"
-            android:gravity="center"
-            android:paddingLeft="20dp"
-            android:paddingTop="20dp"
-            android:paddingRight="20dp"
-
-
-            android:text="@string/add_item_title"
-            android:textSize="20dp"
-
-            android:textStyle="bold"
-
-            app:layout_constraintBottom_toTopOf="@+id/editTextMultiLine"
-
-
-            app:layout_constraintEnd_toEndOf="parent"
-
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/arrowRightImage" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextTranslateTitle"
+            app:layout_constraintVertical_bias="0.296"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextMultiLine"
-            android:layout_width="411dp"
-            android:layout_height="220dp"
-            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:background="#11000000"
             android:ems="10"
             android:gravity="left"
             android:inputType="textMultiLine"
             android:lines="6"
             android:maxLines="6"
             android:paddingLeft="20dp"
+            android:paddingTop="10dp"
             android:paddingRight="20dp"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@android:id/content"
+            android:textSize="20sp"
+
             app:layout_constraintEnd_toEndOf="@android:id/content"
             app:layout_constraintStart_toEndOf="@android:id/content"
-            app:layout_constraintTop_toBottomOf="@+id/addTextTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/addTextHeader2"
+            tools:ignore="SpeakableTextPresentCheck" />
 
-        <Spinner
-            android:id="@+id/sourceLanguageList"
-            android:layout_width="140dp"
-            android:layout_height="65dp"
-            app:layout_constraintBottom_toTopOf="@+id/addTextTitle"
-            app:layout_constraintEnd_toStartOf="@+id/arrowRightImage"
+        <Button
+            android:id="@+id/addButton"
+            android:layout_width="230dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="90dp"
+            android:layout_marginTop="27dp"
+            android:layout_marginEnd="91dp"
+            android:background="@drawable/add_fragment_button"
+            android:text="@string/add_button"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addTextHeader" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextMultiLine"
+            app:layout_constraintVertical_bias="1.0" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/arrowRightImage"
-            android:layout_width="96dp"
-            android:layout_height="69dp"
-            android:icon="@drawable/ic_baseline_arrow_back_24"
-            app:layout_constraintBottom_toTopOf="@+id/addTextTitle"
-            app:layout_constraintEnd_toEndOf="@+id/targetLanguageList"
-            app:layout_constraintStart_toEndOf="@+id/sourceLanguageList"
-            app:layout_constraintTop_toBottomOf="@+id/addTextHeader"
-            app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/ic_baseline_arrow_right_alt_24"
-            tools:srcCompat="@drawable/ic_baseline_arrow_right_alt_24" />
+        <EditText
+            android:id="@+id/editTextTranslateTitle"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="68dp"
+            android:layout_marginTop="52dp"
+            android:layout_marginEnd="68dp"
+
+            android:layout_marginBottom="53dp"
+            android:ems="10"
+            android:hint="@string/add_item_title"
+            android:inputType="textPersonName"
+
+            app:layout_constraintBottom_toTopOf="@+id/arrowRightImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:id="@+id/addButton"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="120dp"
-        android:layout_height="74dp"
-        android:layout_marginBottom="72dp"
-
-        android:text="@string/add_button"
-
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.788"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/constraintLayout2"
-        app:layout_constraintVertical_bias="0.967" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

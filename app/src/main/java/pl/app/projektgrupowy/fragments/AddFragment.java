@@ -24,9 +24,13 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -77,8 +81,8 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         mainViewModel = mainActivity.mainViewModel;
         if (mainViewModel.getNewTranslationData() == null) mainViewModel.setNewTranslationData(new NewTranslation());
         translation = new NewTranslation();
-        translation.title = "tytuł przykładowy"; // TODO: Usunąć
 
+        EditText addTextTitle = (EditText) view.findViewById(R.id.addTextTitle);
         EditText editTextMultiLine = (EditText) view.findViewById(R.id.editTextMultiLine);
         final Spinner sourceLanguageSpinner = view.findViewById(R.id.sourceLanguageList);
         final Spinner targetLanguageSpinner = view.findViewById(R.id.targetLanguageList);
@@ -118,7 +122,8 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                     targetLanguageSpinner.setSelection(categories.indexOf(category));
 
             editTextMultiLine.setText(translation.sourceText);
-            // TODO: Ustawić tutaj tytuł tak jak ten editTextMultiLine
+            // TODO: Ustawić tutaj tytuł tak jak ten editTextMultiLine -- zrobione ??
+            addTextTitle.setText(translation.title);
         }
 
         // Nasłuchiwacz dla tekstu źródłowego
@@ -136,7 +141,20 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
             }
         });
 
-        //TODO: Tutaj zrobić nasłuchiwacz dla pola tekstowego tytułu tak jak dla editTextmultiLine (zmienić tylko translation.sourceText = editable.toString();)
+        //TODO: Tutaj zrobić nasłuchiwacz dla pola tekstowego tytułu tak jak dla editTextmultiLine (zmienić tylko translation.sourceText = editable.toString();) -- zrobione ??
+        addTextTitle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                translation.title = editable.toString();
+                mainViewModel.setNewTranslationData(translation);
+            }
+        });
 
         addButton.setOnClickListener(view1 -> {
             Translation translationProper = new Translation(translation.title, translation.sourceText, translation.sourceLanguage, translation.targetLanguage);
@@ -211,15 +229,18 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                     urlConnection.setDoInput(true);
 
                     JSONObject jsonInput = new JSONObject();
-                    //jsonInput.put("id", 0);
-                    //jsonInput.put("userId", 0);
 
                     jsonInput.put("text", text);
                     jsonInput.put("translatedText", translatedText);
-                    DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
-                    os.writeBytes(jsonInput.toString());
+
+                    //DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());  przed poprawą z UTF 8
+                    //os.writeBytes(jsonInput.toString());
+                    OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
+                    BufferedWriter os = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+                    os.write(jsonInput.toString());
                     os.flush();
                     os.close();
+                    out.close();
 
                     if (urlConnection.getResponseCode() == 200) {
                         InputStream response = urlConnection.getInputStream();

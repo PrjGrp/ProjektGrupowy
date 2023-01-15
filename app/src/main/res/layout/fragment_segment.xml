@@ -5,13 +5,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <EditText
+        android:id="@+id/segment_translation_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/segment_edit_translation_height"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toTopOf="@+id/segment_send_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/segment_source_textview" />
+
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="59dp"
-        android:layout_height="16dp"
-        android:text="Dummy"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/segment_source_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/segment_margin_top_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/segment_send_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/segment_send_button"
+        android:layout_marginBottom="@dimen/segment_margin_top_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

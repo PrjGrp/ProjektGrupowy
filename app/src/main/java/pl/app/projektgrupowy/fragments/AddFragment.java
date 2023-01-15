@@ -74,6 +74,7 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         mainViewModel = mainActivity.mainViewModel;
         if (mainViewModel.getNewTranslationData() == null) mainViewModel.setNewTranslationData(new NewTranslation());
 
@@ -116,7 +117,6 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                     targetLanguageSpinner.setSelection(categories.indexOf(category));
 
             editTextMultiLine.setText(translation.sourceText);
-            // TODO: Ustawić tutaj tytuł tak jak ten editTextMultiLine
         }
         translation.title = "tytuł przykładowy"; // TODO: Usunąć
 
@@ -134,8 +134,6 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                 mainViewModel.setNewTranslationData(translation);
             }
         });
-
-        //TODO: Tutaj zrobić nasłuchiwacz dla pola tekstowego tytułu tak jak dla editTextmultiLine (zmienić tylko translation.sourceText = editable.toString();)
 
         addButton.setOnClickListener(view1 -> {
             Translation translationProper = new Translation(translation.title, translation.sourceText, translation.sourceLanguage, translation.targetLanguage);

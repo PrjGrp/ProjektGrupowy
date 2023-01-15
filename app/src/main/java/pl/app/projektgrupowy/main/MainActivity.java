@@ -171,8 +171,8 @@ public class MainActivity extends AppCompatActivity {
                 getMenuInflater().inflate(R.menu.toolbar_segment, menu);
                 toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
                 toolbar.setNavigationOnClickListener(view -> {
-                    getSupportFragmentManager().popBackStack();
                     mainViewModel.chosenSegment().setValue(null);
+                    getSupportFragmentManager().popBackStack();
                 });
                 toolbar.setTitle(String.format("Segment %d",
                         mainViewModel.chosenSegment().getValue() + 1));
@@ -186,6 +186,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_toolbar_dashboard_logout: {
+                if (getTopFragmentName().equals("SegmentFragment")) {
+                    SegmentFragment segmentFragment =
+                            (SegmentFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
+                    segmentFragment.updateTranslation();
+                }
                 mainViewModel.getToken().setValue(MainViewModel.LOGGED_OUT);
                 mainViewModel.getDataSet().setValue(null);
                 mainViewModel.setNewTranslationData(null);
@@ -224,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_toolbar_segment_save: {
                 SegmentFragment segmentFragment =
                         (SegmentFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
-                //TODO: segmentFragment.save();
+                segmentFragment.updateTranslation();
                 break;
             }
         }

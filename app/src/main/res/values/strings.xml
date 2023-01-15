@@ -47,6 +47,11 @@
     <string name="translation_save_create_dir_fail">Nie udało się stworzyć katalogu</string>
 
     <!-- Strings for SegmentFragment -->
+    <string name="patch_post_async_respond">Pomyślne wysłanie do bazy.</string>
+    <string name="patch_post_async_noRespond">Brak informacji zwrotnej z bazy.</string>
+    <string name="patch_text_error">Nie udało się przesłać przetłumaczonego tekstu.</string>
+    <string name="patch_dialog_async">Aktualizuję tłumaczenie...</string>
+    <string name="segment_send_button">Wyślij</string>
 
 
 

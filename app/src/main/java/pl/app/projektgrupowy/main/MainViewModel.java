@@ -16,6 +16,7 @@ public class MainViewModel extends ViewModel {
     private MutableLiveData<Integer> chosenSegment;
 
     private NewTranslation newTranslationData;
+    private String newSegmentTargetText;
 
 
     public MutableLiveData<String> getToken() {
@@ -49,5 +50,13 @@ public class MainViewModel extends ViewModel {
 
     public void setNewTranslationData(NewTranslation newTranslationData) {
         this.newTranslationData = newTranslationData;
+    }
+
+    public String getNewSegmentTargetText() {
+        return newSegmentTargetText;
+    }
+
+    public void setNewSegmentTargetText(String newSegmentTargetText) {
+        this.newSegmentTargetText = newSegmentTargetText;
     }
 }

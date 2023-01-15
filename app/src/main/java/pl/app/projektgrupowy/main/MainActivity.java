@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mainViewModel.getNewTranslation().observe(this, newVal -> {
-            if (newVal.booleanValue()) {
+            if (newVal) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container_view, AddFragment.class, null)
                         .setReorderingAllowed(true)
@@ -148,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
                 toolbar.setNavigationOnClickListener(view -> {
                     getSupportFragmentManager().popBackStack();
                     mainViewModel.getEditedTranslation().setValue(null);
+                    mainViewModel.getDataSet().setValue(null);
                 });
                 toolbar.setTitle(mainViewModel.getEditedTranslation().getValue().getTitle());
                 break;
@@ -199,7 +200,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        String topFragment = getTopFragmentName();
+        if (topFragment.equals("TranslationFragment")) mainViewModel.getDataSet().setValue(null);
         super.onBackPressed();
+
 
         if (mainViewModel.getNewTranslation().getValue() != null) mainViewModel.getNewTranslation().setValue(false);
         if (mainViewModel.getEditedTranslation().getValue() != null) mainViewModel.getEditedTranslation().setValue(null);

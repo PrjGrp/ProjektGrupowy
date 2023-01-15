@@ -13,6 +13,7 @@ public class MainViewModel extends ViewModel {
     private MutableLiveData<Translation[]> dataSet;
     private MutableLiveData<Boolean> newTranslation;
     private MutableLiveData<Translation> editedTranslation;
+    private MutableLiveData<Integer> chosenSegment;
 
     private NewTranslation newTranslationData;
 
@@ -35,6 +36,11 @@ public class MainViewModel extends ViewModel {
     public MutableLiveData<Translation> getEditedTranslation() {
         if (editedTranslation == null) editedTranslation = new MutableLiveData<>();
         return editedTranslation;
+    }
+
+    public MutableLiveData<Integer> chosenSegment() {
+        if (chosenSegment == null) chosenSegment = new MutableLiveData<>();
+        return chosenSegment;
     }
 
     public NewTranslation getNewTranslationData() {

@@ -76,8 +76,6 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mainViewModel = mainActivity.mainViewModel;
         if (mainViewModel.getNewTranslationData() == null) mainViewModel.setNewTranslationData(new NewTranslation());
-        translation = new NewTranslation();
-        translation.title = "tytuł przykładowy"; // TODO: Usunąć
 
         EditText editTextMultiLine = (EditText) view.findViewById(R.id.editTextMultiLine);
         final Spinner sourceLanguageSpinner = view.findViewById(R.id.sourceLanguageList);
@@ -120,6 +118,7 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
             editTextMultiLine.setText(translation.sourceText);
             // TODO: Ustawić tutaj tytuł tak jak ten editTextMultiLine
         }
+        translation.title = "tytuł przykładowy"; // TODO: Usunąć
 
         // Nasłuchiwacz dla tekstu źródłowego
         editTextMultiLine.addTextChangedListener(new TextWatcher() {

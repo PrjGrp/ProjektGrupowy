@@ -10,6 +10,7 @@
     <string name="action_toolbar_add">Dodaj</string>
     <string name="action_toolbar_delete">Usuń</string>
     <string name="action_toolbar_save">Pobierz</string>
+    <string name="action_toolbar_save_translation">Zapisz</string>
 
     <!-- Strings for LoginFragment -->
     <string name="login_button">Zaloguj</string>
@@ -44,6 +45,8 @@
     <string name="translation_save_success">Zapisano plik</string>
     <string name="translation_save_fail">Nie udało się zapisać pliku</string>
     <string name="translation_save_create_dir_fail">Nie udało się stworzyć katalogu</string>
+
+    <!-- Strings for SegmentFragment -->
 
 
 

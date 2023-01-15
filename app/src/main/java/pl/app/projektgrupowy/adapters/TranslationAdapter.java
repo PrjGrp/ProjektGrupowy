@@ -10,12 +10,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import pl.app.projektgrupowy.R;
 import pl.app.projektgrupowy.assets.Segment;
-import pl.app.projektgrupowy.assets.Translation;
 import pl.app.projektgrupowy.main.MainActivity;
 
 public class TranslationAdapter extends RecyclerView.Adapter<TranslationAdapter.ViewHolder> {
-    private Segment[] dataSet;
-    private MainActivity mainActivity;
+    private final Segment[] dataSet;
+    private final MainActivity mainActivity;
 
     public TranslationAdapter(Segment[] segments, MainActivity activity) {
         dataSet = segments;
@@ -34,7 +33,7 @@ public class TranslationAdapter extends RecyclerView.Adapter<TranslationAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.getIdTextView().setText(Integer.toString(position + 1));
         holder.getSourceTextView().setText(dataSet[position].getSourceText());
-        holder.setChosenItem(dataSet[position]);
+        holder.setChosenSegment(position);
         holder.setActivity(mainActivity);
     }
 
@@ -47,14 +46,14 @@ public class TranslationAdapter extends RecyclerView.Adapter<TranslationAdapter.
         private final TextView idTextView;
         private final TextView sourceTextView;
 
-        private Segment chosenItem;
+        private Integer chosenSegment;
         private MainActivity mainActivity;
 
         public ViewHolder(View v) {
             super(v);
 
             v.setOnClickListener(view -> {
-                // TODO
+                mainActivity.mainViewModel.chosenSegment().setValue(chosenSegment);
             });
 
             idTextView = (TextView) v.findViewById(R.id.translation_index_textview);
@@ -69,8 +68,8 @@ public class TranslationAdapter extends RecyclerView.Adapter<TranslationAdapter.
             return sourceTextView;
         }
 
-        public void setChosenItem(Segment chosenItem) {
-            this.chosenItem = chosenItem;
+        public void setChosenSegment(Integer chosenItem) {
+            this.chosenSegment = chosenItem;
         }
 
         public void setActivity(MainActivity activity) {

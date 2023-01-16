@@ -1,22 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="match_parent">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".fragments.LoginFragment">
 
+    <ImageView
+        android:id="@+id/appLogo"
+        android:layout_width="match_parent"
+        android:layout_height="211dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="72dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/app_logo_full"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ImageContrastCheck"
+        tools:layout_editor_absoluteX="0dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="64dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.245">
+        app:layout_constraintTop_toBottomOf="@+id/appLogo">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutUsername"
@@ -25,30 +39,40 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:hint="@string/login_username_hint"
-            android:textColor="@color/black"
+            android:textColor="@color/grey"
+            android:textColorHint="@color/grey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/usernameLogin"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:textColor="@color/black"
+                android:background="#11000000"
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="22sp"
                 android:inputType="text"
-                android:textColorHint="#546E7A" />
+                android:textColor="@color/grey"
+                android:textColorHint="#546E7A"
+                android:drawableStart="@drawable/ic_baseline_person_outline_24"
+                android:drawablePadding="5dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:hint="@string/login_password_hint"
-            android:textColor="@color/black"
+            android:textColor="@color/grey"
+            android:textColorHint="@color/grey"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUsername"
             tools:layout_editor_absoluteX="0dp"
 
@@ -58,8 +82,16 @@
                 android:id="@+id/passwordLogin"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
+                android:background="#11000000"
                 android:inputType="textPassword"
-                android:textColorHint="#546E7A"/>
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="22sp"
+                android:textColorHint="@color/grey"
+                android:textColor="@color/grey"
+                android:drawableStart="@drawable/ic_baseline_lock_24"
+                android:drawablePadding="5dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -67,12 +99,22 @@
 
     <Button
         android:id="@+id/login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="230dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="80dp"
+        android:background="@drawable/login_activity_button"
+        android:backgroundTint="@color/loginActivityButtonColor"
         android:text="@string/login_button"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintVertical_bias="0.536"
+
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -27,7 +27,7 @@
 
     <!-- Strings for AddFragment -->
     <string name="add_item">Dodaj tekst do tłumacza:</string>
-    <string name="add_item_title">Wprowadź tekst:</string>
+    <string name="add_item_title">Tytuł tłumaczenia</string>
 
     <string name="add_button">Dodaj</string>
     <string name="add_dialog_async">Dodaję tłumaczenie...</string>

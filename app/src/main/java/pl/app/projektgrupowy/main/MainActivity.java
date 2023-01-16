@@ -8,21 +8,33 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.prefs.Preferences;
 
 import pl.app.projektgrupowy.R;
 import pl.app.projektgrupowy.adapters.DashboardAdapter;
 import pl.app.projektgrupowy.assets.NewTranslation;
+import pl.app.projektgrupowy.assets.Segment;
 import pl.app.projektgrupowy.assets.Translation;
 import pl.app.projektgrupowy.fragments.AddFragment;
 import pl.app.projektgrupowy.fragments.DashboardFragment;
 import pl.app.projektgrupowy.fragments.LoginFragment;
+import pl.app.projektgrupowy.fragments.SegmentFragment;
 import pl.app.projektgrupowy.fragments.TranslationFragment;
 
 /**
@@ -78,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mainViewModel.getNewTranslation().observe(this, newVal -> {
-            if (newVal.booleanValue()) {
+            if (newVal) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container_view, AddFragment.class, null)
                         .setReorderingAllowed(true)
@@ -98,6 +110,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mainViewModel.chosenSegment().observe(this, newVal -> {
+            if (newVal != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container_view, SegmentFragment.class, null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack("SegmentFragment")
+                        .commit();
+            }
+        });
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -111,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.clear();
@@ -139,8 +162,20 @@ public class MainActivity extends AppCompatActivity {
                 toolbar.setNavigationOnClickListener(view -> {
                     getSupportFragmentManager().popBackStack();
                     mainViewModel.getEditedTranslation().setValue(null);
+                    mainViewModel.getDataSet().setValue(null);
                 });
                 toolbar.setTitle(mainViewModel.getEditedTranslation().getValue().getTitle());
+                break;
+            }
+            case "SegmentFragment": {
+                getMenuInflater().inflate(R.menu.toolbar_segment, menu);
+                toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
+                toolbar.setNavigationOnClickListener(view -> {
+                    mainViewModel.chosenSegment().setValue(null);
+                    getSupportFragmentManager().popBackStack();
+                });
+                toolbar.setTitle(String.format("Segment %d",
+                        mainViewModel.chosenSegment().getValue() + 1));
                 break;
             }
         }
@@ -151,10 +186,17 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_toolbar_dashboard_logout: {
+                if (getTopFragmentName().equals("SegmentFragment")) {
+                    SegmentFragment segmentFragment =
+                            (SegmentFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
+                    segmentFragment.updateTranslation();
+                }
                 mainViewModel.getToken().setValue(MainViewModel.LOGGED_OUT);
                 mainViewModel.getDataSet().setValue(null);
                 mainViewModel.setNewTranslationData(null);
                 mainViewModel.getNewTranslation().setValue(false);
+                mainViewModel.getEditedTranslation().setValue(null);
+                mainViewModel.chosenSegment().setValue(null);
                 break;
             }
             case R.id.action_toolbar_dashboard_add: {
@@ -168,16 +210,42 @@ public class MainActivity extends AppCompatActivity {
                 translationFragment.delete();
                 break;
             }
+            case R.id.action_toolbar_translation_save: {
+                Translation translation = mainViewModel.getEditedTranslation().getValue();
+                File file = new File (getExternalFilesDir("Tłumaczenia"),
+                        translation.getTitle().replace(" ", "_") + ".xml");
+                try {
+                    if (!file.exists()) file.createNewFile();
+                    FileWriter writer = new FileWriter(file.getAbsolutePath());
+                    writer.write(translation.toString());
+                    writer.close();
+                    Toast.makeText(this, R.string.translation_save_success, Toast.LENGTH_SHORT).show();
+                } catch (IOException ex) {
+                    Log.e("Błąd zapisywania pliku", ex.toString());
+                    Toast.makeText(this, R.string.translation_save_fail, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            }
+            case R.id.action_toolbar_segment_save: {
+                SegmentFragment segmentFragment =
+                        (SegmentFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
+                segmentFragment.updateTranslation();
+                break;
+            }
         }
         return true;
     }
 
     @Override
     public void onBackPressed() {
+        if (getTopFragmentName().equals("TranslationFragment")) mainViewModel.getDataSet().setValue(null);
+        if (mainViewModel.getEditedTranslation().getValue() != null && !getTopFragmentName().equals("SegmentFragment"))
+            mainViewModel.getEditedTranslation().setValue(null);
+
         super.onBackPressed();
 
         if (mainViewModel.getNewTranslation().getValue() != null) mainViewModel.getNewTranslation().setValue(false);
-        if (mainViewModel.getEditedTranslation().getValue() != null) mainViewModel.getEditedTranslation().setValue(null);
+        if (mainViewModel.chosenSegment().getValue() != null) mainViewModel.chosenSegment().setValue(null);
     }
 
 

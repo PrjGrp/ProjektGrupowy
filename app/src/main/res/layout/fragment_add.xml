@@ -109,7 +109,6 @@
             android:paddingTop="10dp"
             android:paddingRight="20dp"
             android:textSize="20sp"
-
             app:layout_constraintEnd_toEndOf="@android:id/content"
             app:layout_constraintStart_toEndOf="@android:id/content"
             app:layout_constraintTop_toBottomOf="@+id/addTextHeader2"

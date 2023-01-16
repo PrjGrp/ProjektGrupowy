@@ -49,25 +49,21 @@
             app:layout_constraintTop_toBottomOf="@+id/addTextHeader" />
 
 
-        <TextView
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/addTextTitle"
             android:layout_width="321dp"
-            android:layout_height="47dp"
+            android:layout_height="60dp"
             android:layout_marginTop="30dp"
             android:gravity="center"
             android:paddingLeft="20dp"
             android:paddingTop="20dp"
             android:paddingRight="20dp"
 
-
-            android:text="@string/add_item_title"
+            android:hint="Wprowadź tytuł tłumaczenia"
             android:textSize="20dp"
 
             android:textStyle="bold"
-
             app:layout_constraintBottom_toTopOf="@+id/editTextMultiLine"
-
-
             app:layout_constraintEnd_toEndOf="parent"
 
             app:layout_constraintStart_toStartOf="parent"
@@ -86,6 +82,7 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:textSize="20dp"
+            android:hint="Wprowadź tekst do tłumaczenia"
             app:layout_constraintBottom_toTopOf="@android:id/content"
             app:layout_constraintEnd_toEndOf="@android:id/content"
             app:layout_constraintStart_toEndOf="@android:id/content"

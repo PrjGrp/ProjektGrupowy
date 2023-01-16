@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/translation_item_height"
+    android:layout_marginLeft="@dimen/translation_item_margin_left"
+    android:layout_marginRight="@dimen/translation_item_margin_right">
+
+    <TextView
+        android:id="@+id/translation_index_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/translation_item_index_height" />
+
+    <TextView
+        android:id="@+id/translation_source_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/translation_item_source_text_margin_top"/>
+
+</FrameLayout>

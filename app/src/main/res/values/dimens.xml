@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- DASHBOARD -->
     <dimen name="dashboard_item_height">70dp</dimen>
     <dimen name="dashboard_item_margin_left">20dp</dimen>
     <dimen name="dashboard_item_margin_right">20dp</dimen>
     <dimen name="dashboard_item_title_margin_top">30dp</dimen>
+
+    <!-- TRANSLATION -->
+    <dimen name="translation_item_height">80dp</dimen>
+    <dimen name="translation_item_margin_left">20dp</dimen>
+    <dimen name="translation_item_margin_right">20dp</dimen>
+    <dimen name="translation_item_index_height">30dp</dimen>
+    <dimen name="translation_item_source_text_margin_top">35dp</dimen>
+
+    <!-- SEGMENT -->
+    <dimen name="segment_margin_sides">20dp</dimen>
+    <dimen name="segment_margin_top_bottom">25dp</dimen>
+    <dimen name="segment_edit_translation_height">200dp</dimen>
 </resources>

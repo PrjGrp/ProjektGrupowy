@@ -16,6 +16,10 @@ public class Segment implements Serializable {
         this.id = id;
     }
 
+    public String getSourceText() {
+        return sourceText;
+    }
+
     public String getTargetText() {
         return targetText;
     }

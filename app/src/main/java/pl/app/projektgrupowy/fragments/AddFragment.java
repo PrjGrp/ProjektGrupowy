@@ -78,9 +78,9 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         mainViewModel = mainActivity.mainViewModel;
         if (mainViewModel.getNewTranslationData() == null) mainViewModel.setNewTranslationData(new NewTranslation());
-        translation = new NewTranslation();
 
         EditText addTextTitle = (EditText) view.findViewById(R.id.addTextTitle);
         EditText editTextMultiLine = (EditText) view.findViewById(R.id.editTextMultiLine);
@@ -122,9 +122,9 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                     targetLanguageSpinner.setSelection(categories.indexOf(category));
 
             editTextMultiLine.setText(translation.sourceText);
-            // TODO: Ustawić tutaj tytuł tak jak ten editTextMultiLine -- zrobione ??
             addTextTitle.setText(translation.title);
         }
+        translation.title = "tytuł przykładowy"; // TODO: Usunąć
 
         // Nasłuchiwacz dla tekstu źródłowego
         editTextMultiLine.addTextChangedListener(new TextWatcher() {
@@ -140,8 +140,7 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                 mainViewModel.setNewTranslationData(translation);
             }
         });
-
-        //TODO: Tutaj zrobić nasłuchiwacz dla pola tekstowego tytułu tak jak dla editTextmultiLine (zmienić tylko translation.sourceText = editable.toString();) -- zrobione ??
+        
         addTextTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
@@ -155,7 +154,6 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                 mainViewModel.setNewTranslationData(translation);
             }
         });
-
         addButton.setOnClickListener(view1 -> {
             Translation translationProper = new Translation(translation.title, translation.sourceText, translation.sourceLanguage, translation.targetLanguage);
 

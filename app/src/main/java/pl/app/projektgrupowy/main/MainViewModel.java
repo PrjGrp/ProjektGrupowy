@@ -13,8 +13,10 @@ public class MainViewModel extends ViewModel {
     private MutableLiveData<Translation[]> dataSet;
     private MutableLiveData<Boolean> newTranslation;
     private MutableLiveData<Translation> editedTranslation;
+    private MutableLiveData<Integer> chosenSegment;
 
     private NewTranslation newTranslationData;
+    private String newSegmentTargetText;
 
 
     public MutableLiveData<String> getToken() {
@@ -37,11 +39,24 @@ public class MainViewModel extends ViewModel {
         return editedTranslation;
     }
 
+    public MutableLiveData<Integer> chosenSegment() {
+        if (chosenSegment == null) chosenSegment = new MutableLiveData<>();
+        return chosenSegment;
+    }
+
     public NewTranslation getNewTranslationData() {
         return newTranslationData;
     }
 
     public void setNewTranslationData(NewTranslation newTranslationData) {
         this.newTranslationData = newTranslationData;
+    }
+
+    public String getNewSegmentTargetText() {
+        return newSegmentTargetText;
+    }
+
+    public void setNewSegmentTargetText(String newSegmentTargetText) {
+        this.newSegmentTargetText = newSegmentTargetText;
     }
 }

@@ -6,6 +6,7 @@
     android:id="@+id/action_toolbar_segment_save"
     android:icon="@drawable/ic_baseline_save_24"
     android:title="@string/action_toolbar_save_translation"
+
     app:showAsAction="ifRoom"/>
 
     <item

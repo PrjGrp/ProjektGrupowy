@@ -5,34 +5,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/segment_translation_edittext"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/segment_edit_translation_height"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/segment_send_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/segment_source_textview" />
-
     <TextView
         android:id="@+id/segment_source_textview"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/segment_margin_top_bottom"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/poppinsbold"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <EditText
+        android:id="@+id/segment_translation_edittext"
+        android:layout_width="0dp"
+        android:layout_height="241dp"
+        android:layout_marginTop="104dp"
+        android:background="#11000000"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:lines="6"
+        android:maxLines="6"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingRight="20dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/segment_source_textview" />
+
     <Button
         android:id="@+id/segment_send_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="230dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="28dp"
+        android:background="@drawable/add_fragment_button"
         android:text="@string/segment_send_button"
-        android:layout_marginBottom="@dimen/segment_margin_top_bottom"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/segment_translation_edittext"
+        app:layout_constraintVertical_bias="0.995" />
 </androidx.constraintlayout.widget.ConstraintLayout>

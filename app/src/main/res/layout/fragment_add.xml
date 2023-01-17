@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -14,7 +18,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
 
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
             app:layout_constraintBottom_toBottomOf="parent"
@@ -29,11 +33,11 @@
                 android:id="@+id/addTextHeader2"
                 android:layout_width="0dp"
                 android:layout_height="47dp"
-                android:layout_marginStart="44dp"
+                android:layout_marginStart="45dp"
+                android:layout_marginEnd="45dp"
                 android:layout_marginTop="8dp"
 
 
-                android:layout_marginEnd="46dp"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/poppinsbold"
                 android:gravity="center"
@@ -99,7 +103,7 @@
                 android:layout_height="260dp"
                 android:background="#11000000"
                 android:ems="10"
-                android:gravity="left"
+                android:gravity="start"
                 android:inputType="textMultiLine"
                 android:lines="6"
                 android:maxLines="6"
@@ -135,7 +139,8 @@
                 android:layout_marginStart="68dp"
                 android:layout_marginTop="52dp"
                 android:layout_marginEnd="68dp"
-
+                android:gravity="center"
+                android:fontFamily="@font/poppinsmedium"
                 android:layout_marginBottom="53dp"
                 android:ems="10"
                 android:hint="@string/add_item_title"
@@ -151,3 +156,4 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

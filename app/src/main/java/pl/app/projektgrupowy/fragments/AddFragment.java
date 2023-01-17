@@ -44,15 +44,6 @@ import pl.app.projektgrupowy.R;
 import pl.app.projektgrupowy.assets.Translation;
 import pl.app.projektgrupowy.main.MainViewModel;
 
-/**
- * Klasa realizująca dodawanie fragmentów
- *
- * TODO:
- * Masz tutaj pole do działania, zrób proszę tak jak pisałem w zgłoszeniu, jest tam też screenshot.
- * WAŻNE: Nie rób na razie komunikacji z backendem, po prostu poustawiaj ładnie pola, i zrób walidację
- * Ogranicz się proszę do zmian w plikach fragment_add.xml i AddFragment.java, jak będziesz chciał coś innego ruszać to daj znać, nie chce mi się później na tych mergach działać
- */
-
 public class AddFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private MainActivity mainActivity;// TUTAJ MASZ JUZ REFERENCJE DO ACTIVITY, NIE MUSISZ ZA KAZDYM RAZEM getActivity() wołac
     private MainViewModel mainViewModel;
@@ -82,7 +73,7 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         mainViewModel = mainActivity.mainViewModel;
         if (mainViewModel.getNewTranslationData() == null) mainViewModel.setNewTranslationData(new NewTranslation());
 
-        EditText addTextTitle = (EditText) view.findViewById(R.id.addTextTitle);
+        EditText addTextTitle = (EditText) view.findViewById(R.id.editTextTranslateTitle);
         EditText editTextMultiLine = (EditText) view.findViewById(R.id.editTextMultiLine);
         final Spinner sourceLanguageSpinner = view.findViewById(R.id.sourceLanguageList);
         final Spinner targetLanguageSpinner = view.findViewById(R.id.targetLanguageList);
@@ -124,8 +115,6 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
             editTextMultiLine.setText(translation.sourceText);
             addTextTitle.setText(translation.title);
         }
-        translation.title = "tytuł przykładowy"; // TODO: Usunąć
-
         // Nasłuchiwacz dla tekstu źródłowego
         editTextMultiLine.addTextChangedListener(new TextWatcher() {
             @Override

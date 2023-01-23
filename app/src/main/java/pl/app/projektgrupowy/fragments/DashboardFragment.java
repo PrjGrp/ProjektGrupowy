@@ -80,7 +80,7 @@ public class DashboardFragment extends Fragment {
         super.onResume();
         Translation[] dataSet = mainActivity.mainViewModel.getDataSet().getValue();
         if (dataSet == null) {
-            LoadData loadData = new LoadData();
+           LoadData loadData = new LoadData();
             loadData.execute("");
         } else setRecyclerViewAdapter(dataSet);
     }

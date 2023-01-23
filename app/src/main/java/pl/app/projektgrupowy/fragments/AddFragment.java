@@ -144,13 +144,15 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
             }
         });
         addButton.setOnClickListener(view1 -> {
-            Translation translationProper = new Translation(translation.title, translation.sourceText, translation.sourceLanguage, translation.targetLanguage);
+            if(translation.validate()) {
 
-            SendToDB sendToDB = new SendToDB();
+                Translation translationProper = new Translation(translation.title, translation.sourceText, translation.sourceLanguage, translation.targetLanguage);
 
-            if(translation.validate()) sendToDB.execute(translationProper.getSourceText(), translationProper.toString());
-            else Toast.makeText(getActivity().getApplication(), getString(R.string.add_text_invalid), Toast.LENGTH_SHORT).show();
+                SendToDB sendToDB = new SendToDB();
+                sendToDB.execute(translationProper.getSourceText(), translationProper.toString());
+            }else Toast.makeText(getActivity().getApplication(), getString(R.string.add_text_invalid), Toast.LENGTH_SHORT).show();
         });
+
     }
 
     /**
@@ -183,6 +185,8 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
             try {
                 if (!s.equals("")) {
+                    mainViewModel.getDataSet().setValue(null);
+                    mainViewModel.setNewTranslationData(new NewTranslation());
                     mainViewModel.getNewTranslation().setValue(false);
                     mainActivity.getSupportFragmentManager().popBackStack();
                     Toast.makeText(mainActivity.getApplication(), getString(R.string.add_post_async_respond), Toast.LENGTH_SHORT).show();
@@ -220,8 +224,6 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                     jsonInput.put("text", text);
                     jsonInput.put("translatedText", translatedText);
 
-                    //DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());  przed poprawą z UTF 8
-                    //os.writeBytes(jsonInput.toString());
                     OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
                     BufferedWriter os = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
                     os.write(jsonInput.toString());

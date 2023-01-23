@@ -20,9 +20,13 @@ import androidx.fragment.app.Fragment;
 
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
@@ -152,10 +156,13 @@ public class SegmentFragment extends Fragment {
                     jsonInput.put("id", id);
                     jsonInput.put("text", text);
                     jsonInput.put("translatedText", translatedText);
-                    DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
-                    os.writeBytes(jsonInput.toString());
+
+                    OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
+                    BufferedWriter os = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+                    os.write(jsonInput.toString());
                     os.flush();
                     os.close();
+                    out.close();
 
                     if (urlConnection.getResponseCode() == 200) {
                         InputStream response = urlConnection.getInputStream();
